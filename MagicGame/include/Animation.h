@@ -16,35 +16,35 @@ public:
 	//Получаем спрайты и запихуиваем их в вектор с этими спрайтами
 	Animation(std::initializer_list<olc::Sprite*> list) {
 		for (olc::Sprite* s : list)
-			sprites.push_back(s);
+			sprites_.push_back(s);
 	}
 
 public:
 	//Добавить спрайты для анимации 
 	void AddSprite(olc::Sprite* sprite) {
-		sprites.push_back(sprite);
+		sprites_.push_back(sprite);
 	}
 	//Добавить время для анимации
-	void AddTime(float time) { animation_time += time; }
+	void AddTime(float time) { animation_time_ += time; }
 	//Получить текущий спрайт анимации 
 	olc::Sprite* GetSprite() {
-		if (animation_time > animation_speed / 10) {
-			animation_time = 0;
-			iterator++;
-			if (iterator >= sprites.size())
+		if (animation_time_ > animation_speed_ / 10) {
+			animation_time_ = 0;
+			iterator_++;
+			if (iterator_ >= sprites_.size())
 				ResetIterator();
 		}
 
-		return sprites[iterator];
+		return sprites_[iterator_];
 	}
 	inline void ResetIterator() {
-		iterator = 0;
+		iterator_ = 0;
 	}
 
 
 private:
-	std::vector<olc::Sprite*> sprites;
-	int iterator = 0;
-	float animation_time = 0.0f;
-	float animation_speed = 3.0f;
+	std::vector<olc::Sprite*> sprites_;
+	int iterator_ = 0;
+	float animation_time_ = 0.0f;
+	float animation_speed_ = 3.0f;
 };

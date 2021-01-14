@@ -95,37 +95,34 @@ public:
 		sAppName = "Game";
 	}
 
-public:
-	Player player = Player(100, 50);
-	Map* map;
-	olc::Sprite* background_sprite = new olc::Sprite("images/First-location1.png");
-	vector<olc::Sprite*> player_sprites;
-	vector<olc::Sprite*> caracter_sprites;
-	vector<Item> items_list;
+private:
+	Player player_ = Player(100, 50);
+	Map* map_;
+	olc::Sprite* background_sprite_ = new olc::Sprite("images/First-location1.png");
+	vector<olc::Sprite*> player_sprites_;
+	vector<olc::Sprite*> caracter_sprites_;
+	vector<Item> items_list_;
 
-	Animation animation;
-	olc::Pixel background_color = olc::Pixel(0, 0, 0);
-	Box box = Box(200, 200);
-	Box box2 = Box(300, 140);
+	olc::Pixel background_color_ = olc::Pixel(0, 0, 0);
 
 
 	
 public:
 	bool OnUserCreate() override {
 
-		player_sprites.push_back(new olc::Sprite(player.GetStandSprite()));
-		player_sprites.push_back(new olc::Sprite(player.GetWalkSprite()));
+		player_sprites_.push_back(new olc::Sprite(player_.GetStandSprite()));
+		player_sprites_.push_back(new olc::Sprite(player_.GetWalkSprite()));
 
-		map = new Map(background_sprite);
+		map_ = new Map(background_sprite_);
 
-		for (Item i : map->GetItems())
-			items_list.push_back(i);
+		for (Item i : map_->GetItems())
+			items_list_.push_back(i);
 
 
-		for (int i = 0; i < player_sprites.size(); i++)
-			player.animation.AddSprite(player_sprites[i]);
+		for (int i = 0; i < player_sprites_.size(); i++)
+			player_.animation.AddSprite(player_sprites_[i]);
 
-		player.AttachToMap(map);
+		player_.AttachToMap(map_);
 
 		return true;
 	}
@@ -136,8 +133,8 @@ public:
 
 		CheckKeyboardEvents(fElapsedTime);
 
-		olc::Sprite* player_sprite = player.animation.GetSprite();
-		player.Update(player_sprite, fElapsedTime);
+		olc::Sprite* player_sprite = player_.animation.GetSprite();
+		player_.Update(player_sprite, fElapsedTime);
 
 		bool map_moved = 
 		FillScreen();
@@ -147,7 +144,7 @@ public:
 		DrawGun();
 		DrawCaracters();
 		
-		//DrawMapBorders();
+		DrawMapBorders();
 
 		return true;
 	}
@@ -158,13 +155,13 @@ private:
 		for (int x = 0; x < sprite->width; ++x) {
 			for (int y = 0; y < sprite->height; ++y) {
 				olc::Pixel p;
-				if (player.NowSide == Side::Right)
+				if (player_.NowSide == Side::Right)
 					p = sprite->GetPixel(sprite->width - x - 1, y);
 				else
 					p = sprite->GetPixel(x, y);
 				if (p == sprite->GetPixel(0, 0))
 					continue;
-				Point point = player.GetPosition();
+				Point point = player_.GetPosition();
 
 
 				//Эта часть усеяна магическими выражениями!!!
@@ -173,7 +170,7 @@ private:
 				if(map_moved)
 					Draw(x + m_LeftPadding, point.y + y, p);
 				else{
-					int test = background_sprite->width - player.GetPosition().x;
+					int test = background_sprite_->width - player_.GetPosition().x;
 					if (test < screen_width)
 					{
 						test = screen_width - test;
@@ -194,25 +191,25 @@ private:
 
 		bool map_moved = false;
 
-		int y_pad = background_sprite->height - ScreenHeight();
+		int y_pad = background_sprite_->height - ScreenHeight();
 		int x_pad = 0;
 
-		if (background_sprite->width - player.GetPosition().x + m_LeftPadding > 0 &&
-			player.GetPosition().x - m_LeftPadding > 0) {
-			if (player.GetPosition().x + screen_width - m_LeftPadding >= background_sprite->width) {
-				x_pad = background_sprite->width - screen_width;
+		if (background_sprite_->width - player_.GetPosition().x + m_LeftPadding > 0 &&
+			player_.GetPosition().x - m_LeftPadding > 0) {
+			if (player_.GetPosition().x + screen_width - m_LeftPadding >= background_sprite_->width) {
+				x_pad = background_sprite_->width - screen_width;
 			}
 			//Чи нет
 			else {
 				map_moved = true;
-				x_pad = player.GetPosition().x - m_LeftPadding;
+				x_pad = player_.GetPosition().x - m_LeftPadding;
 			}
-			map->SetPadding(x_pad);
+			map_->SetPadding(x_pad);
 		}
 
 		for (int x = 0; x < ScreenWidth(); ++x) {
 			for (int y = 0; y < ScreenHeight(); ++y) {
-				Draw(x, y, background_sprite->GetPixel(x + x_pad, y + y_pad));
+				Draw(x, y, background_sprite_->GetPixel(x + x_pad, y + y_pad));
 			}
 		}
 		return map_moved;
@@ -220,18 +217,18 @@ private:
 
 	//Нарисовать все предметы находящиеся на карте  
 	void DrawItems() {
-		for (Item item : items_list) {
+		for (Item item : items_list_) {
 			for (int x = 0; x < item.Width(); ++x) {
 				for (int y = 0; y < item.Height(); ++y) {
 					olc::Pixel p = item.GetSprite()->GetPixel(x, y);
 					if (p == item.GetSprite()->GetPixel(0, 0))
 						continue;
 
-					if (x + item.GetPosition().x - map->GetPadding() > screen_width
-						|| x + item.GetPosition().x - map->GetPadding() <= 0)
+					if (x + item.GetPosition().x - map_->GetPadding() > screen_width
+						|| x + item.GetPosition().x - map_->GetPadding() <= 0)
 						continue;
 					
-					Draw(x + item.GetPosition().x - map->GetPadding(), y + item.GetPosition().y, p);
+					Draw(x + item.GetPosition().x - map_->GetPadding(), y + item.GetPosition().y, p);
 				}
 			}
 		}
@@ -242,36 +239,36 @@ private:
 
 	//Нарисовать пушку 
 	void DrawGun() {
-		if (player.IsAtacking()) {
-			olc::Sprite* gun = player.gun.GetSprite();
+		if (player_.IsAtacking()) {
+			olc::Sprite* gun = player_.gun.GetSprite();
 			for (int x = 0; x < gun->width; x++) {
 				for (int y = 0; y < gun->height; y++) {
 					olc::Pixel pixel = gun->GetPixel(x, y);
 					if (pixel == gun->GetPixel(0, 0))
 						continue;
-					Draw(x + player.gun.GetPosition().x - map->GetPadding(), y + player.gun.GetPosition().y, pixel);
+					Draw(x + player_.gun.GetPosition().x - map_->GetPadding(), y + player_.gun.GetPosition().y, pixel);
 				}
 			}
 
 			Grounds type;
-			Item* touches = map->CheckIfTouchesItem(player.gun.GetPosition(), player.gun.GetSprite(), &type);
+			Item* touches = map_->CheckIfTouchesItem(player_.gun.GetPosition(), player_.gun.GetSprite(), &type);
 
 			if (touches && type == Grounds::NormalItem) {
-				player.StopAtacking();
+				player_.StopAtacking();
 				RemoveItem(*touches);
 			}
 			else if (type != Grounds::None) {
-				player.StopAtacking();
+				player_.StopAtacking();
 			}
 		}
 	}
 
 	//Убирает предмет с карты и затем из массива всех предметов, тем самым пепрестаёт его рисовать и учитывать 
 	void RemoveItem(Item item) {
-		map->RemoveSprite(item);
-		for (auto i = items_list.begin(); i < items_list.end(); i++) {
+		map_->RemoveSprite(item);
+		for (auto i = items_list_.begin(); i < items_list_.end(); i++) {
 			if (i->GetPosition() == item.GetPosition()) {
-				items_list.erase(i);
+				items_list_.erase(i);
 				return;
 			}
 		}
@@ -282,7 +279,7 @@ private:
 		for (int x = 0; x < screen_width; x++) {
 			for (int y = 0; y < screen_height; y++) {
 				if (x >= 0 && x < screen_width) {
-					switch (map->At(x + map->GetPadding(), y)) {
+					switch (map_->At(x + map_->GetPadding(), y)) {
 						case Grounds::None:
 							break;
 						case Grounds::Normal:
@@ -303,25 +300,25 @@ private:
 
 	//Проверяет действия игрока, если игрок что то нажал то вызывает соответсвующую функцию для класса Player
 	void CheckKeyboardEvents(float fElapsedTime) {
-		if (GetKey(olc::W).bHeld)player.Move(Side::Up, player_sprites[0], fElapsedTime);
-		if (GetKey(olc::W).bPressed)player.Move(Side::Jump, player_sprites[0], fElapsedTime);
+		if (GetKey(olc::W).bHeld)player_.Move(Side::Up, player_sprites_[0], fElapsedTime);
+		if (GetKey(olc::W).bPressed)player_.Move(Side::Jump, player_sprites_[0], fElapsedTime);
 		if (GetKey(olc::A).bHeld) {
-			player.Move(Side::Left, player_sprites[0], fElapsedTime);
-			player.NowSide = Side::Left;
-			player.animation.AddTime(fElapsedTime);
+			player_.Move(Side::Left, player_sprites_[0], fElapsedTime);
+			player_.NowSide = Side::Left;
+			player_.animation.AddTime(fElapsedTime);
 		}
 		if (GetKey(olc::D).bHeld) {
-			player.Move(Side::Right, player_sprites[0], fElapsedTime);
-			player.NowSide = Side::Right;
-			player.animation.AddTime(fElapsedTime);
+			player_.Move(Side::Right, player_sprites_[0], fElapsedTime);
+			player_.NowSide = Side::Right;
+			player_.animation.AddTime(fElapsedTime);
 		}
 
 		if (GetKey(olc::D).bReleased || GetKey(olc::A).bReleased)
-			player.animation.ResetIterator();
+			player_.animation.ResetIterator();
 
 		if (GetKey(olc::R).bPressed)
-			if (!player.IsAtacking())
-				player.Atack1();
+			if (!player_.IsAtacking())
+				player_.Atack1();
 	}
 
 

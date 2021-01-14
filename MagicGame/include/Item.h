@@ -25,39 +25,40 @@ struct Point {
 };
 
 class Item {
-private:
-	int x, y;
-	bool m_IsBroken = false;
-	olc::Sprite* m_Sprite;
-
-protected:
-	std::string m_ItemImage = "images/box.png";
-	std::string m_ItemsDirectory = "images/";
 
 public:
 
-	Item(int x, int y) : x(x), y(y) {
-		m_Sprite = new olc::Sprite(m_ItemImage);
+	Item(int x, int y) : x_(x), y_(y) {
+		sprite_ = new olc::Sprite(item_image_);
 	}
-	Item(int x, int y, std::string& file) : x(x), y(y) {
-		m_Sprite = new olc::Sprite(m_ItemsDirectory + file);
+	Item(int x, int y, std::string& file) : x_(x), y_(y) {
+		sprite_ = new olc::Sprite(items_directory + file);
 	}
 
-	inline Point GetPosition() { return Point(x, y); }
+	inline Point GetPosition() { return Point(x_, y_); }
 
 	inline olc::Sprite* GetSprite() {
-		return m_Sprite;
+		return sprite_;
 	}
 
 	inline void Break() {
-		m_IsBroken = false;
+		is_broken_ = true;
 	}
 
-	inline bool IsBroken() { return m_IsBroken; }
+	inline bool IsBroken() { return is_broken_; }
 
-	inline int Width() { return m_Sprite->width; }
-	inline int Height() { return m_Sprite->height; }
+	inline int Width() { return sprite_->width; }
+	inline int Height() { return sprite_->height; }
 
+
+private:
+	int x_, y_;
+	bool is_broken_ = false;
+	olc::Sprite* sprite_;
+
+protected:
+	std::string item_image_ = "images/box.png";
+	std::string items_directory = "images/";
 };
 
 

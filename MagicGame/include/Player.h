@@ -41,12 +41,12 @@ public:
 	}
 public:
 	void Update(olc::Sprite* sprite, float time) override {
-		if (!Touches(0, 1 * drop_speed, sprite)) {
-			pos_y += 1 * drop_speed;
-			drop_speed += 0.1f * time / 0.01;
+		if (!Touches(0, 1 * drop_speed_, sprite)) {
+			pos_y_ += 1 * drop_speed_;
+			drop_speed_ += 0.1f * time / 0.01;
 		}
 		else
-			drop_speed = 0.0f;
+			drop_speed_ = 0.0f;
 		gun.Update(time);
 	}
 

@@ -20,19 +20,19 @@ class Gun {
 public:
 	//Конструкор, принимает название файла со спрайтом
 	Gun(std::string fname) {
-		_gun_sprite = new olc::Sprite(fname);
+		gun_sprite_ = new olc::Sprite(fname);
 	}
 	//Использовать пушку
 	virtual bool Use(Side side) {
 		return true;
 	}
 	inline olc::Sprite* GetSprite() {
-		return _gun_sprite;
+		return gun_sprite_;
 	}
 
 
 private:
-	olc::Sprite* _gun_sprite;
+	olc::Sprite* gun_sprite_;
 };
 
 
@@ -45,56 +45,56 @@ public:
 	//Обновляет положение оружия 
 	void Update(float time) {
 
-		x += speed * time / 0.01;
-		distance += speed * time / 0.01;
+		x_ += speed_ * time / 0.01;
+		distance_ += speed_ * time / 0.01;
 
-		if(speed > 0)
-			if (distance >= max_distance) {
-				player->atacking = false;
-				speed = 0;
-				distance = 0;
+		if(speed_ > 0)
+			if (distance_ >= max_distance_) {
+				player_->atacking = false;
+				speed_ = 0;
+				distance_ = 0;
 			}
-		if (speed < 0) {
-			if (distance <= max_distance * -1) {
-				player->atacking = false;
-				speed = 0;
-				distance = 0;
+		if (speed_ < 0) {
+			if (distance_ <= max_distance_ * -1) {
+				player_->atacking = false;
+				speed_ = 0;
+				distance_ = 0;
 			}
 		}
 	}
 	//Использовать пушку возвращает false если не может использовать
-	bool Use(Caracter* player) {
+	bool Use(Caracter* player_) {
 
-		distance = 0;
+		distance_ = 0;
 
-		if (player->NowSide == Side::Right)
-			speed = 3;
-		else if (player->NowSide == Side::Left)
-			speed = -3;
+		if (player_->NowSide == Side::Right)
+			speed_ = 3;
+		else if (player_->NowSide == Side::Left)
+			speed_ = -3;
 
-		x = player->GetPosition().x + 10;
-		y = player->GetPosition().y - (int)(GetSprite()->height / 2) + 40;
+		x_ = player_->GetPosition().x + 10;
+		y_ = player_->GetPosition().y - (int)(GetSprite()->height / 2) + 40;
 
-		if (player->NowSide == Side::Left)
-			x -= GetSprite()->width;
+		if (player_->NowSide == Side::Left)
+			x_ -= GetSprite()->width;
 
-		this->player = player;
+		this->player_ = player_;
 
 		return true;
 	}
 
 
 	Point GetPosition() {
-		return Point(x, y);
+		return Point(x_, y_);
 	}
 
 
 private:
-	int x, y;
+	int x_, y_;
 	//Дистанция на данный момент и максимальная дистанция которую может пролететь снаряд
-	int distance, max_distance = 150;
-	float speed;
+	int distance_, max_distance_ = 150;
+	float speed_;
 
 	//Владелец пушки
-	Caracter* player;
+	Caracter* player_;
 };
