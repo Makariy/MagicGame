@@ -39,14 +39,23 @@ public:
 	std::string GetWalkSprite() override {
 		return "images/magic-step.png";
 	}
+	olc::Sprite* HP_sprite = new olc::Sprite("images/HP-bottle.png");
+
 public:
 	void Update(olc::Sprite* sprite, float time) override {
+		time_passed_ += time;
 		if (!Touches(0, 1 * drop_speed_, sprite)) {
 			pos_y_ += 1 * drop_speed_;
 			drop_speed_ += 0.1f * time / 0.01;
 		}
 		else
 			drop_speed_ = 0.0f;
+
+		if (health_ <= 100 && time_passed_ > 2 && !is_dead_) {
+			time_passed_ = 0;
+			health_ += 1;
+		}
+
 		gun.Update(time);
 	}
 
@@ -63,6 +72,27 @@ public:
 		atacking = false;
 	}
 
+	inline void GetDamage(int num) {
+		health_ -= num;
+	}
+
+	inline int GetHealth() {
+		return health_;
+	}
+	
+	inline int GetMana() {
+		return mana_;
+	}
+
+	inline olc::Sprite* GetHPSprite() {
+		return HP_sprite;
+	}
+
 private:
-	float mana = 100;
+
+private:
+	int mana_ = 100;
+	int health_ = 100;
+	float time_passed_ = 0;
+	bool is_dead_ = false;
 };

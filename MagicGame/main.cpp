@@ -156,6 +156,7 @@ public:
 		DrawPlayer(player_sprite, map_moved);
 		DrawItems();
 		DrawGun();
+		DrawHPStatistics();
 		DrawCaracters();
 		
 		DrawMapBorders();
@@ -273,6 +274,26 @@ private:
 			}
 			else if (type != Grounds::None) {
 				player_.StopAtacking();
+			}
+		}
+	}
+
+
+	void DrawHPStatistics() {
+		olc::Sprite* sprite = player_.GetHPSprite();
+
+		int x_padding = 12;
+		int y_padding = 5;
+
+		int bottle_position_x = screen_width - sprite->width - 10;
+		int bottle_position_y = 10;
+
+		for (int x = 0; x < sprite->width; x++) {
+			for (int y = 0; y < sprite->height; y++) {
+				olc::Pixel p = sprite->GetPixel(x, y);
+				if (p == sprite->GetPixel(0, 0))
+					continue;
+				Draw(bottle_position_x + x, bottle_position_y + y, p);
 			}
 		}
 	}
