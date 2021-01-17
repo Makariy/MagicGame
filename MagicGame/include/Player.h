@@ -21,7 +21,6 @@
 //Player(Me)
 class Player : public Caracter {
 public:
-	//Конструтор базового класса, там инициализируется позиция 
 	using Caracter::Caracter;
 	MagicGun1 gun = MagicGun1("images/magic-gun-1.png");
 
@@ -90,6 +89,7 @@ public:
 
 
 private:
+	
 
 private:
 	HP_Bottle bottle_ = HP_Bottle();

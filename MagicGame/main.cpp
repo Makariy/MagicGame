@@ -98,6 +98,7 @@ class Gun;
 class Item;
 class MagicGun1;
 class Animation;
+class Enemy;
 
 
 class Game : public olc::PixelGameEngine {
@@ -132,6 +133,10 @@ public:
 		map_ = new Map(background_sprite_);
 
 		enemys_.push_back(new Enemy(100, 100));
+		enemys_.push_back(new Enemy(200, 00));
+
+		for (Enemy* enemy : enemys_)
+			Caracter::AddCaracter(enemy);
 
 		for (Item i : map_->GetItems())
 			items_list_.push_back(i);
@@ -141,10 +146,7 @@ public:
 			player_.animation.AddSprite(player_sprites_[i]);
 
 		player_.AttachToMap(map_);
-		//enemy.AttachToMap(map_);
-		
-		for (Enemy* enemy : enemys_)
-			enemy->AttachToMap(map_);
+		Caracter::AttachAllCaractersToMap(map_);
 		
 		return true;
 	}
@@ -177,7 +179,7 @@ public:
 
 private:
 	void UpdateAndDrawCaracters(float time) {
-		for (Enemy* enemy : enemys_) {
+		for (Caracter* enemy : Caracter::caracters) {
 			olc::Sprite* sprite = enemy->animation.GetSprite();
 			enemy->Update(sprite, time);
 			DrawCaracter(sprite, enemy->GetPosition());

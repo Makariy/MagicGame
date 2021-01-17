@@ -27,13 +27,29 @@ enum Side {
 
 class Caracter {
 public:
-	Caracter() : pos_x_(0), pos_y_(0) {}
-	Caracter(int x, int y) :pos_x_(x), pos_y_(y) {}
-	Caracter(Point p) : pos_x_(p.x), pos_y_(p.y) {}
-	~Caracter() {}
+	Caracter() : pos_x_(0), pos_y_(0) {  }
+	Caracter(int x, int y) :pos_x_(x), pos_y_(y) {  }
+	Caracter(Point p) : pos_x_(p.x), pos_y_(p.y) {  }
+	~Caracter() {  }
+
+	static void AddCaracter(Caracter* caracter) {
+		Caracter::caracters.push_back(caracter);
+	}
+	static bool RemoveCaracter(Caracter* caracter) {
+		for (auto iter = Caracter::caracters.begin(); iter < Caracter::caracters.end(); iter++) {
+			if (*iter == caracter) {
+				Caracter::caracters.erase(iter);
+				return true;
+			}
+		}
+		return false;
+	}
+
 	bool atacking = false;
 
 	Animation animation;
+
+	static std::vector<Caracter*> caracters;
 
 	//Получение всяких свойств
 public:
@@ -54,8 +70,13 @@ public:
 	}
 
 public:
+
+	static void AttachAllCaractersToMap(Map* map) {
+		for (Caracter* caracter : caracters)
+			caracter->AttachToMap(map);
+	}
 	//Привязать к карте
-	inline void AttachToMap(Map* m) { this->map_ = m; }
+	void AttachToMap(Map* m) { this->map_ = m; }
 
 	//Обновляет положение на карте и всякие события 
 	virtual void Update(olc::Sprite* sprite, float time) {
@@ -166,3 +187,5 @@ protected:
 	std::string sprite_stand_;
 	std::string sprite_walk_;
 };
+
+std::vector<Caracter*> Caracter::caracters;
