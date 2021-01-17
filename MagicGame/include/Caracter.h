@@ -23,9 +23,11 @@ enum Side {
 	Left
 };
 
+
+
 class Caracter {
 public:
-	Caracter() :pos_x_(0), pos_y_(0) {}
+	Caracter() : pos_x_(0), pos_y_(0) {}
 	Caracter(int x, int y) :pos_x_(x), pos_y_(y) {}
 	Caracter(Point p) : pos_x_(p.x), pos_y_(p.y) {}
 	~Caracter() {}
@@ -44,9 +46,11 @@ public:
 	virtual inline std::string GetWalkSprite() {
 		return sprite_walk_;
 	}
-
 	virtual inline Point GetPosition() {
 		return Point(pos_x_, pos_y_);
+	}
+	inline bool IsDead() {
+		return is_dead_;
 	}
 
 public:
@@ -55,27 +59,31 @@ public:
 
 	//ќбновл€ет положение на карте и вс€кие событи€ 
 	virtual void Update(olc::Sprite* sprite, float time) {
-		if (!Touches(pos_x_, pos_y_ * drop_speed_, sprite)) {
-			pos_y_ += 1 * drop_speed_ * time / 0.02;
-			drop_speed_ += drop_speed_ * (1+drop_speed_coeficient_);
-		}
-		else {
-			drop_speed_ = 0.0f;
-		}
+		UpdatePosition(sprite, time);
 	}
 
+
+	void UpdatePosition(olc::Sprite* sprite, float time) {
+		if (!Touches(0, 1 * drop_speed_, sprite)) {
+			pos_y_ += 1 * drop_speed_;
+			drop_speed_ += 0.1f * time / 0.01;
+		}
+		else
+			drop_speed_ = 0.0f;
+	}
 	//ѕровер€ет если персонаж касаетс€ какой то поверхности карты 
 	bool Touches(int x_pad, int y_pad, olc::Sprite* sprite) {
-
-		int _pos_x = (int)pos_x_;
-		int _pos_y = (int)pos_y_;
-		for (int x = _pos_x + x_pad; x < _pos_x + x_pad + sprite->width; x++)
-			for (int y = _pos_y + y_pad; y < _pos_y + y_pad + sprite->height; y++)
+		int pos_x = (int)pos_x_;
+		int pos_y = (int)pos_y_;
+		for (int x = pos_x + x_pad; x < pos_x + x_pad + sprite->width; x++) {
+			for (int y = pos_y + y_pad; y < pos_y + y_pad + sprite->height; y++) {
 				if (map_->At(x, y) != Grounds::None) {
 					if (sprite->GetPixel(0, 0) == sprite->GetPixel(x - (int)(x_pad - pos_x_), y - (int)(y_pad - pos_x_)))
 						continue;
 					return true;
 				}
+			}
+		}
 		return false;
 	}
 	//ѕомен€ть спрайт
@@ -108,8 +116,6 @@ public:
 			default:
 				throw std::runtime_error("Wrong moving side argument in class Cararcter");
 		}
-
-	
 		if (x > 0) {
 			x = x + time / 0.018;
 
@@ -154,6 +160,8 @@ protected:
 	float drop_speed_ = 0.0f;
 	//ј вот это как раз отображает то с какой скоростью будет падать персонаж
 	float drop_speed_coeficient_ = 0.03f;
+
+	bool is_dead_ = false;
 
 	std::string sprite_stand_;
 	std::string sprite_walk_;

@@ -3,6 +3,7 @@
 #include "Map.h"
 #include <iostream>
 #include "lib/olcPixelGameEngine.h"
+#include "Grounds.h"
 
 //Точка, отражает точку на экране 
 struct Point {
@@ -25,9 +26,7 @@ struct Point {
 };
 
 class Item {
-
 public:
-
 	Item(int x, int y) : x_(x), y_(y) {
 		sprite_ = new olc::Sprite(item_image_);
 	}

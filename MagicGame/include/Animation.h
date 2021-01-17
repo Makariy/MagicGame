@@ -4,7 +4,6 @@
 
 
 
-
 #ifndef ANIMATION_H
 	#define ANIMATION_H
 #endif
@@ -32,10 +31,11 @@ public:
 			animation_time_ = 0;
 			iterator_++;
 			if (iterator_ >= sprites_.size())
-				ResetIterator();
+				iterator_ = 0;
 		}
-
-		return sprites_[iterator_];
+		if(iterator_ < sprites_.size())
+			return sprites_[iterator_];
+		return sprites_[0];
 	}
 	inline void ResetIterator() {
 		iterator_ = 0;

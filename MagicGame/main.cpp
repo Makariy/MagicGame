@@ -52,7 +52,9 @@
 #include "Map.h"
 #include "Caracter.h"
 #include "Gun.h"
+#include "HP-Bottle.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Item.h"
 
 #include <fstream>
@@ -109,7 +111,7 @@ private:
 	Map* map_;
 	olc::Sprite* background_sprite_ = new olc::Sprite("images/First-location1.png");
 	vector<olc::Sprite*> player_sprites_;
-	vector<olc::Sprite*> caracter_sprites_;
+	vector<Enemy*> enemys_;
 	vector<Item> items_list_;
 
 	olc::Pixel background_color_ = olc::Pixel(0, 0, 0);
@@ -129,6 +131,8 @@ public:
 
 		map_ = new Map(background_sprite_);
 
+		enemys_.push_back(new Enemy(100, 100));
+
 		for (Item i : map_->GetItems())
 			items_list_.push_back(i);
 
@@ -137,7 +141,11 @@ public:
 			player_.animation.AddSprite(player_sprites_[i]);
 
 		player_.AttachToMap(map_);
-
+		//enemy.AttachToMap(map_);
+		
+		for (Enemy* enemy : enemys_)
+			enemy->AttachToMap(map_);
+		
 		return true;
 	}
 
@@ -149,15 +157,18 @@ public:
 
 		olc::Sprite* player_sprite = player_.animation.GetSprite();
 		player_.Update(player_sprite, fElapsedTime);
+		if (player_.IsDead()) {
+			std::cout << "dead\n";
+		}
 
 		bool map_moved = 
-		FillScreen();
+		  FillScreen();
 
 		DrawPlayer(player_sprite, map_moved);
+		UpdateAndDrawCaracters(fElapsedTime);
 		DrawItems();
 		DrawGun();
 		DrawHPStatistics();
-		DrawCaracters();
 		
 		DrawMapBorders();
 
@@ -165,6 +176,29 @@ public:
 	}
 
 private:
+	void UpdateAndDrawCaracters(float time) {
+		for (Enemy* enemy : enemys_) {
+			olc::Sprite* sprite = enemy->animation.GetSprite();
+			enemy->Update(sprite, time);
+			DrawCaracter(sprite, enemy->GetPosition());
+		}
+	}
+
+	//!!!Функция вызывается из функции Update класса Map!!!
+	//Нарисовать всех персонажей находящихся на карте 
+	void DrawCaracter(olc::Sprite* sprite, Point pos) {
+		for (int x = 0; x < sprite->width; x++) {
+			for (int y = 0; y < sprite->height; y++) {
+				olc::Pixel p = sprite->GetPixel(x, y);
+				if (p == sprite->GetPixel(0, 0))
+					continue;
+
+				if(pos.x - map_->GetPadding() +  sprite->width > 0)
+					Draw(pos.x + x - map_->GetPadding(), pos.y + y, p);
+			}
+		}
+	}
+
 	//Нарисовать игрока
 	void DrawPlayer(olc::Sprite* sprite, bool map_moved) {
 		for (int x = 0; x < sprite->width; ++x) {
@@ -185,11 +219,11 @@ private:
 				if(map_moved)
 					Draw(x + left_padding_, point.y + y, p);
 				else{
-					int test = background_sprite_->width - player_.GetPosition().x;
-					if (test < screen_width)
+					int position = background_sprite_->width - player_.GetPosition().x;
+					if (position < screen_width)
 					{
-						test = screen_width - test;
-						Draw(test + x, point.y + y, p);
+						position = screen_width - position;
+						Draw(position + x, point.y + y, p);
 					}
 					else
 						Draw(point.x + x, point.y + y, p);
@@ -249,9 +283,6 @@ private:
 		}
 	}
 
-	//Нарисовать всех персонажей находящихся на карте 
-	void DrawCaracters() {}
-
 	//Нарисовать пушку 
 	void DrawGun() {
 		if (player_.IsAtacking()) {
@@ -278,9 +309,9 @@ private:
 		}
 	}
 
-
+	//Нарисовать статистику игрока ( жизни, мана )
 	void DrawHPStatistics() {
-		olc::Sprite* sprite = player_.GetHPSprite();
+		olc::Sprite* sprite = player_.GetBottle().GetSprite();
 
 		int x_padding = 12;
 		int y_padding = 5;
@@ -294,6 +325,16 @@ private:
 				if (p == sprite->GetPixel(0, 0))
 					continue;
 				Draw(bottle_position_x + x, bottle_position_y + y, p);
+			}
+		}
+
+		HP_Bottle bottle = player_.GetBottle();
+		for (int x = bottle.GetStart().x; x < bottle.GetEnd().x; x++) {
+			for (int y = bottle.GetStart().y; y < bottle.GetEnd().y; y++) {
+				olc::Pixel p = sprite->GetPixel(x, y);
+				if (p != sprite->GetPixel(0, 0))
+					continue;
+				Draw(bottle_position_x + x, bottle_position_y + y, olc::RED);
 			}
 		}
 	}
@@ -354,6 +395,8 @@ private:
 		if (GetKey(olc::R).bPressed)
 			if (!player_.IsAtacking())
 				player_.Atack1();
+		if (GetKey(olc::N).bPressed)
+			player_.Damage(10);
 	}
 
 };

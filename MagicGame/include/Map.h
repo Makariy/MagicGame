@@ -7,7 +7,7 @@
 #include "lib/olcPixelGameEngine.h"
 #include "Animation.h"
 #include "Item.h"
-
+#include "Grounds.h"
 
 #ifndef ANIMATION_H
 	#error Animation.h must be included straight after GameEngine 
@@ -27,17 +27,6 @@ constexpr int screen_height = 430;
 std::ostream& operator<<(std::ostream& stream, const Point& p) {
 	return stream << p.x << ' ' << p.y << std::endl;
 }
-
-//Типы поверхностей
-enum Grounds {
-	None,		//Ничего (воздух(ничего нет))
-	Normal,		//Простая земля 
-	NormalItem,	//Для предметов чтобы можно было удалять их с карты без реинициализации
-	Ice,		//Лёд  (возможно в дальнейшем персонаж будет по этой поверхности скользить)
-	Water,		//Вода (возможно в дельнейшем персонаж будет там плавать)
-	Lava		//Лава (возможно в дальнейшем персонаж будет на этой поверхности гореть)
-};
-
 
 
 
@@ -170,10 +159,11 @@ public:
 
 	//Принимает х и у которые являются позициями спрайта
 	//Возвращает тип поверхности на которую попадает этот спрайт
-	inline Grounds At(int x, int y) {
-		if (x < 0 || x >= width_ || y < 0 || y >= height_)
+	Grounds At(int x, int y) {
+		if (x < 0 || x > width_ - 1 || y < 0 || y > height_ - 1)
 			return Grounds::Normal;
 		return border_[x][y];
+		
 	}
 
 public:
@@ -272,6 +262,7 @@ public:
 	inline std::vector<Item>& GetItems() {
 		return items_;
 	}
+
 
 private:
 	//Отражает границы на карте, индексируя по X и Y возвращает тип поверзности на этой точке 

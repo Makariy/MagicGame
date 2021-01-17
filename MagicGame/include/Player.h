@@ -3,6 +3,7 @@
 #include "Caracter.h"
 #include "Gun.h"
 #include "Animation.h"
+#include "HP-bottle.h"
 
 #ifndef ANIMATION_H
 	#error Animation.h must be included straight after GameEngine 
@@ -26,12 +27,6 @@ public:
 
 
 public:
-	template<typename T>
-	void Draw(T func) {
-		func();
-	}
-
-public:
 	//Возвращает всякие спрайты
 	std::string GetStandSprite() override {
 		return "images/magic.png";
@@ -39,24 +34,28 @@ public:
 	std::string GetWalkSprite() override {
 		return "images/magic-step.png";
 	}
-	olc::Sprite* HP_sprite = new olc::Sprite("images/HP-bottle.png");
+	HP_Bottle GetBottle() {
+		return bottle_;
+	}
 
 public:
 	void Update(olc::Sprite* sprite, float time) override {
+		
 		time_passed_ += time;
-		if (!Touches(0, 1 * drop_speed_, sprite)) {
-			pos_y_ += 1 * drop_speed_;
-			drop_speed_ += 0.1f * time / 0.01;
-		}
-		else
-			drop_speed_ = 0.0f;
 
 		if (health_ <= 100 && time_passed_ > 2 && !is_dead_) {
 			time_passed_ = 0;
-			health_ += 1;
+			if (100 - health_ >= 10)
+				health_ += health_add_coef_;
+			else
+				health_ += 100 - health_;
+
+			bottle_.SetHealth(health_);
 		}
 
 		gun.Update(time);
+
+		UpdatePosition(sprite, time);
 	}
 
 	void Atack1() {
@@ -72,8 +71,13 @@ public:
 		atacking = false;
 	}
 
-	inline void GetDamage(int num) {
-		health_ -= num;
+	inline void Damage(int num) {
+		if(health_ > 0)
+			health_ -= num;
+		time_passed_ = 0;
+		if (health_ < 1)
+			is_dead_ = true;
+		bottle_.SetHealth(health_);
 	}
 
 	inline int GetHealth() {
@@ -84,15 +88,13 @@ public:
 		return mana_;
 	}
 
-	inline olc::Sprite* GetHPSprite() {
-		return HP_sprite;
-	}
 
 private:
 
 private:
+	HP_Bottle bottle_ = HP_Bottle();
 	int mana_ = 100;
 	int health_ = 100;
+	int health_add_coef_ = 10;
 	float time_passed_ = 0;
-	bool is_dead_ = false;
 };

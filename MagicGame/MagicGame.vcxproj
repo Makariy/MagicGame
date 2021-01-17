@@ -22,6 +22,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Grounds.h" />
+    <ClInclude Include="HP-Bottle.h" />
     <ClInclude Include="include\Animation.h" />
     <ClInclude Include="include\Caracter.h" />
     <ClInclude Include="include\Gun.h" />
