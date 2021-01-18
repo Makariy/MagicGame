@@ -42,6 +42,9 @@ public:
 		
 		time_passed_ += time;
 
+		if(time_after_getting_damage_ < 1)
+			time_after_getting_damage_ += time;
+
 		if (health_ <= 100 && time_passed_ > 2 && !is_dead_) {
 			time_passed_ = 0;
 			if (100 - health_ >= 10)
@@ -52,9 +55,17 @@ public:
 			bottle_.SetHealth(health_);
 		}
 
+		if (Caracter::CheckIfTouchesCaracter(GetPosition(), animation.GetNowSprite()))
+			Damage(10);
+
 		gun.Update(time);
 
 		UpdatePosition(sprite, time);
+	}
+
+	void PlayerMove(Side side, olc::Sprite* sprite, float time) {
+
+		Move(side, sprite, time);
 	}
 
 	void Atack1() {
@@ -71,6 +82,11 @@ public:
 	}
 
 	inline void Damage(int num) {
+		if (time_after_getting_damage_ < 0.5)
+			return;
+		else
+			time_after_getting_damage_ = 0;
+
 		if(health_ > 0)
 			health_ -= num;
 		time_passed_ = 0;
@@ -89,12 +105,10 @@ public:
 
 
 private:
-	
-
-private:
 	HP_Bottle bottle_ = HP_Bottle();
 	int mana_ = 100;
 	int health_ = 100;
 	int health_add_coef_ = 10;
 	float time_passed_ = 0;
+	float time_after_getting_damage_ = 0;
 };

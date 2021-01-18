@@ -130,10 +130,9 @@ public:
 		player_sprites_.push_back(new olc::Sprite(player_.GetStandSprite()));
 		player_sprites_.push_back(new olc::Sprite(player_.GetWalkSprite()));
 
-		map_ = new Map(background_sprite_);
+		enemys_.push_back(new Enemy(300, 100));
 
-		enemys_.push_back(new Enemy(100, 100));
-		enemys_.push_back(new Enemy(200, 00));
+		map_ = new Map(background_sprite_);
 
 		for (Enemy* enemy : enemys_)
 			Caracter::AddCaracter(enemy);
@@ -378,15 +377,15 @@ private:
 
 	//Проверяет действия игрока, если игрок что то нажал то вызывает соответсвующую функцию для класса Player
 	void CheckKeyboardEvents(float fElapsedTime) {
-		if (GetKey(olc::W).bHeld)player_.Move(Side::Up, player_sprites_[0], fElapsedTime);
-		if (GetKey(olc::W).bPressed)player_.Move(Side::Jump, player_sprites_[0], fElapsedTime);
+		if (GetKey(olc::W).bHeld)player_.PlayerMove(Side::Up, player_sprites_[0], fElapsedTime);
+		if (GetKey(olc::W).bPressed)player_.PlayerMove(Side::Jump, player_sprites_[0], fElapsedTime);
 		if (GetKey(olc::A).bHeld) {
-			player_.Move(Side::Left, player_sprites_[0], fElapsedTime);
+			player_.PlayerMove(Side::Left, player_sprites_[0], fElapsedTime);
 			player_.NowSide = Side::Left;
 			player_.animation.AddTime(fElapsedTime);
 		}
 		if (GetKey(olc::D).bHeld) {
-			player_.Move(Side::Right, player_sprites_[0], fElapsedTime);
+			player_.PlayerMove(Side::Right, player_sprites_[0], fElapsedTime);
 			player_.NowSide = Side::Right;
 			player_.animation.AddTime(fElapsedTime);
 		}
@@ -407,7 +406,7 @@ private:
 int main(){
 
 	Game* game = new Game();
-	if (game->Construct(screen_width, screen_height, 1, 1, false, true))
+	if (game->Construct(screen_width, screen_height, 1, 1, false, true)
 		game->Start();
 	return 0;
 

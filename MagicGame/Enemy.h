@@ -11,7 +11,14 @@ public:
 
 
 	void Update(olc::Sprite* sprite, float time) override {
-		Move(side, sprite, time);
+		if (Move(side, sprite, time)) {}
+		else if (side = Side::Left) {
+			side = Side::Right;
+			distance_done = distance_to_do - distance_done;
+		}
+		else {
+			side = Side::Left;
+		}
 		if (side == Side::Left)
 			distance_done -= 1;
 		else
@@ -26,6 +33,7 @@ public:
 
 protected:
 	void Construct() {
+		speed_ = 1.0f;
 		sprite_stand_ = "images/Enemy.png";
 		sprite_walk_ = "images/Enemy.png";
 		animation.AddSprite(new olc::Sprite(sprite_stand_));

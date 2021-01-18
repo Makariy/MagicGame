@@ -45,6 +45,15 @@ public:
 		return false;
 	}
 
+	static Caracter* CheckIfTouchesCaracter(Point p, olc::Sprite* sprite) {
+		for (Caracter* car : Caracter::caracters) {
+			olc::Sprite* sprite = car->animation.GetNowSprite();
+			if (Map::IsBetween(p, car->GetPosition(), Point(car->GetPosition().x + sprite->width, car->GetPosition().y + sprite->height)))
+				return car;
+		}
+		return NULL;
+	}
+
 	bool atacking = false;
 
 	Animation animation;
@@ -107,6 +116,7 @@ public:
 		}
 		return false;
 	}
+
 	//Поменять спрайт
 	void ChangeSprite(const std::string& stand, const std::string& walk) {
 		sprite_stand_ = stand;
@@ -170,6 +180,7 @@ public:
 	Side NowSide = Side::Right;
 
 protected:
+
 	Map* map_;
 
 	float pos_x_;

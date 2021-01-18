@@ -204,6 +204,7 @@ public:
 	//Проверить попадает ли спрайт из параметра который находится на точке Point на этой карте 
 	//на другой объект, если попадает то функция возвращает этот объект. Попасть спрайт может двумя краями либо серединой
 	//Непонятный код но после тестирования выяснилось что работает.
+	//Третий параметр возвращает тип поверхности которой касается персонаж ( не может быть Grounds::None )
 	Item* CheckIfTouchesItem(Point point, olc::Sprite* sprite, Grounds* type) {
 
 		Item* item = NULL;
@@ -212,19 +213,16 @@ public:
 			Item i = items_[index];
 			if (i.GetPosition().x + 2 <= point.x + 2 && i.GetPosition().x + i.Width() - 2 >= point.x 
 				&& i.GetPosition().y < point.y + (sprite->height / 2) && i.GetPosition().y + i.Height() > point.y + (sprite->height/2)) {
-				rtype = Grounds::NormalItem;
 				item = &items_[index];
 				break;
 			}
 			else if (i.GetPosition().x <= point.x + sprite->width - 2 && i.GetPosition().x + i.Width() >= point.x + sprite->width + 2
 				&& i.GetPosition().y < point.y + sprite->height / 2 && i.GetPosition().y + i.Height() > point.y + sprite->height / 2) {
-				rtype = Grounds::NormalItem;
 				item = &items_[index];
 				break;
 			}
 			else if (i.GetPosition().x <= point.x + sprite->width / 2 && i.GetPosition().x + i.Width() >= point.x + sprite->width / 2
 				&& i.GetPosition().y < point.y + sprite->height / 2 && i.GetPosition().y + i.Height() > point.y + sprite->height / 2) {
-				rtype = Grounds::NormalItem;
 				item = &items_[index];
 				break;
 			}
@@ -232,7 +230,7 @@ public:
 
 		int border__padding = 5;
 
-		if(item == NULL)
+		if (item == NULL) {
 			for (int x = border__padding; x < sprite->width - border__padding; x++) {
 				for (int y = border__padding; y < sprite->height - border__padding; y++) {
 					if (this->At(point.x + x, point.y + y) != Grounds::None) {
@@ -241,8 +239,24 @@ public:
 					}
 				}
 			}
+		}
+		else
+			rtype = Grounds::NormalItem;
+
 		*type = rtype;
 		return item;
+	}
+
+	static bool IsBetween(Point p, int x1, int y1, int x2, int y2) {
+		if (p.x >= x1 && p.x <= x2 && p.y >= y1 && p.y <= y2)
+			return true;
+		return false;
+	}
+
+	static bool IsBetween(Point p, Point p1, Point p2) {
+		if (p.x >= p1.x && p.x <= p2.x && p.y >= p1.y && p.y <= p2.y)
+			return true;
+		return false;
 	}
 
 public:

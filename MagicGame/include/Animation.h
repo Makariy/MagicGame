@@ -37,6 +37,7 @@ public:
 			return sprites_[iterator_];
 		return sprites_[0];
 	}
+	olc::Sprite* GetNowSprite() { return sprites_[iterator_]; }
 	inline void ResetIterator() {
 		iterator_ = 0;
 	}
