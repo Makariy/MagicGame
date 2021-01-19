@@ -253,9 +253,11 @@ public:
 		return false;
 	}
 
-	static bool IsBetween(Point p, Point p1, Point p2) {
-		if (p.x >= p1.x && p.x <= p2.x && p.y >= p1.y && p.y <= p2.y)
-			return true;
+	static bool IsBetween(Point p, Point p1, Point p2, int width = 0, int height = 0) {
+		for (int x = p.x; x < p.x + width; x++)
+			for (int y = p.y; y < p.y + height; y++)
+				if (p1.x <= x && x <= p2.x && p1.y <= y && y <= p2.y)
+					return true;
 		return false;
 	}
 

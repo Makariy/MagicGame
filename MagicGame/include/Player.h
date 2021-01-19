@@ -89,6 +89,8 @@ public:
 
 		if(health_ > 0)
 			health_ -= num;
+		if (health_ > 100)
+			health_ = 100;
 		time_passed_ = 0;
 		if (health_ < 1)
 			is_dead_ = true;

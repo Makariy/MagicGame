@@ -185,7 +185,6 @@ private:
 		}
 	}
 
-	//!!!Функция вызывается из функции Update класса Map!!!
 	//Нарисовать всех персонажей находящихся на карте 
 	void DrawCaracter(olc::Sprite* sprite, Point pos) {
 		for (int x = 0; x < sprite->width; x++) {
@@ -397,7 +396,7 @@ private:
 			if (!player_.IsAtacking())
 				player_.Atack1();
 		if (GetKey(olc::N).bPressed)
-			player_.Damage(10);
+			player_.Damage(-50);
 	}
 
 };
@@ -406,7 +405,7 @@ private:
 int main(){
 
 	Game* game = new Game();
-	if (game->Construct(screen_width, screen_height, 1, 1, false, true)
+	if (game->Construct(screen_width, screen_height, 1, 1, false, true))
 		game->Start();
 	return 0;
 

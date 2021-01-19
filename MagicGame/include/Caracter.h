@@ -47,8 +47,9 @@ public:
 
 	static Caracter* CheckIfTouchesCaracter(Point p, olc::Sprite* sprite) {
 		for (Caracter* car : Caracter::caracters) {
-			olc::Sprite* sprite = car->animation.GetNowSprite();
-			if (Map::IsBetween(p, car->GetPosition(), Point(car->GetPosition().x + sprite->width, car->GetPosition().y + sprite->height)))
+			olc::Sprite* car_sprite = car->animation.GetNowSprite();
+			if (Map::IsBetween(p, car->GetPosition(), Point(car->GetPosition().x + car_sprite->width, car->GetPosition().y + car_sprite->height),
+				sprite->width, sprite->height))
 				return car;
 		}
 		return NULL;
