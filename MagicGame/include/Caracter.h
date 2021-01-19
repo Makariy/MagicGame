@@ -32,6 +32,23 @@ public:
 	Caracter(Point p) : pos_x_(p.x), pos_y_(p.y) {  }
 	~Caracter() {  }
 
+	struct MoveInstruction {
+		Side side; // Сторона для движения
+		float time; // Требуется для функции Move
+		int times; // Количество раз для повторения
+		olc::Sprite* animation; 
+		float call_down = kcall_down;
+
+		float kcall_down = 0.5;
+
+		bool is_on_calldown = false;
+		bool is_moving_for = false;
+
+		bool IsOnCallDown() {
+			return is_on_calldown;
+		}
+	};
+
 	static void AddCaracter(Caracter* caracter) {
 		Caracter::caracters.push_back(caracter);
 	}
@@ -101,6 +118,19 @@ public:
 		}
 		else
 			drop_speed_ = 0.0f;
+	}
+
+	virtual void Damage(int num) {
+		health_ -= num;
+		if (health_ < 0)
+			is_dead_ = true;
+	}
+
+	virtual void Heal(int num) {
+		if (health_ + num <= max_health_)
+			health_ += num;
+		else
+			health_ = max_health_;
 	}
 	//Проверяет если персонаж касается какой то поверхности карты 
 	bool Touches(int x_pad, int y_pad, olc::Sprite* sprite) {
@@ -178,16 +208,32 @@ public:
 		
 		return true;
 	}
-	Side NowSide = Side::Right;
 
+	virtual bool Move(MoveInstruction instruction) {
+		return Move(instruction.side, instruction.animation, instruction.time);
+	}
+
+	inline Side GetNowSide() {
+		return NowSide;
+	}
+
+	Side NowSide = Side::Right;
 protected:
 
 	Map* map_;
 
+	MoveInstruction move_instruction_;
+
 	float pos_x_;
 	int pos_y_;
 
+	int max_health_ = 100;
+
+	int health_ = 100;
 	float speed_ = 2.0f;
+
+	Side side = Side::Right;
+
 	//НЕ ОТОБРАЖАЕТ СКОРОСТЬ ПАДЕНИЯ КАК КОНСТАНТУ 
 	//Отображает корость падения на днный момент 
 	float drop_speed_ = 0.0f;

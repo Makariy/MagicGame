@@ -36,6 +36,26 @@
 
 */
 
+
+
+
+
+
+/*
+
+
+		Нужно на писать обновление пушки через сам класс пушки и прибрать код
+
+
+*/
+
+
+
+
+
+
+
+
 #ifndef OLC_PGE_APPLICATION
 	#define OLC_PGE_APPLICATION
 #endif 
@@ -284,6 +304,7 @@ private:
 	}
 
 	//Нарисовать пушку 
+	//И проверить ни касается ли пушка объекта, если да то удалить 
 	void DrawGun() {
 		if (player_.IsAtacking()) {
 			olc::Sprite* gun = player_.gun.GetSprite();
@@ -396,7 +417,7 @@ private:
 			if (!player_.IsAtacking())
 				player_.Atack1();
 		if (GetKey(olc::N).bPressed)
-			player_.Damage(-50);
+			player_.Heal(50);
 	}
 
 };

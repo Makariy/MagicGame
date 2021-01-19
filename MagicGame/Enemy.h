@@ -34,6 +34,7 @@ public:
 protected:
 	void Construct() {
 		speed_ = 1.0f;
+		health_ = 10;
 		sprite_stand_ = "images/Enemy.png";
 		sprite_walk_ = "images/Enemy.png";
 		animation.AddSprite(new olc::Sprite(sprite_stand_));
@@ -41,7 +42,6 @@ protected:
 	}
 
 private:
-	Side side = Side::Right;
 	int distance_done = 0;
 	int distance_to_do = 100;
 };

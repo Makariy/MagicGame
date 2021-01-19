@@ -31,7 +31,7 @@ public:
 	}
 
 
-private:
+protected:
 	olc::Sprite* gun_sprite_;
 };
 
@@ -60,6 +60,11 @@ public:
 				speed_ = 0;
 				distance_ = 0;
 			}
+		}
+		Caracter* caracter = Caracter::CheckIfTouchesCaracter(Point(x_, y_), gun_sprite_);
+		if (caracter) {
+			Caracter::RemoveCaracter(caracter);
+			player_->atacking = false;
 		}
 	}
 	//Использовать пушку возвращает false если не может использовать

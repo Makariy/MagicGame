@@ -54,18 +54,60 @@ public:
 
 			bottle_.SetHealth(health_);
 		}
-
-		if (Caracter::CheckIfTouchesCaracter(GetPosition(), animation.GetNowSprite()))
+		Caracter* caracter = Caracter::CheckIfTouchesCaracter(GetPosition(), animation.GetNowSprite());
+		if (caracter) {
 			Damage(10);
+			BounceOff(caracter->GetNowSide());
+		}
 
 		gun.Update(time);
+
+		//Если отбрасывание тоьлко что сработало то уменьшать время с момента срабатывания
+		if (move_instruction_.is_on_calldown) {
+			move_instruction_.call_down -= time;
+		}
+		if (move_instruction_.call_down <= 0) {
+			move_instruction_.call_down = move_instruction_.kcall_down;
+			move_instruction_.is_on_calldown = false;
+		}
+		//Если отбрасывается
+		if (move_instruction_.is_moving_for) {
+			Move(move_instruction_);
+			move_instruction_.times--;
+			if (move_instruction_.times <= 0) {
+				move_instruction_.is_moving_for = false;
+			}
+		}
 
 		UpdatePosition(sprite, time);
 	}
 
+	void MoveFor(int times, Side side, float time, olc::Sprite* sprite = NULL) {
+		move_instruction_.is_moving_for = true;
+		move_instruction_.animation = sprite ? sprite : animation.GetNowSprite();
+		move_instruction_.side = side;
+		move_instruction_.time = time;
+		move_instruction_.times = times;
+	}
+
+	void BounceOff(Side side, float power = 1.0f) {
+		if (move_instruction_.is_moving_for)
+			return;
+		if (move_instruction_.IsOnCallDown())
+			return;
+
+		// Начать CallDown
+		move_instruction_.is_on_calldown = true;
+		Move(Side::Jump, animation.GetNowSprite(), power / 7);
+		MoveFor(10, side == Side::Right ? Side::Left : Side::Right, power / 20);
+	}
+
 	void PlayerMove(Side side, olc::Sprite* sprite, float time) {
 
-		Move(side, sprite, time);
+		if (move_instruction_.is_moving_for) {	}
+		else {
+			Move(side, sprite, time);
+		}
 	}
 
 	void Atack1() {
@@ -81,7 +123,7 @@ public:
 		atacking = false;
 	}
 
-	inline void Damage(int num) {
+	void Damage(int num) override {
 		if (time_after_getting_damage_ < 0.5)
 			return;
 		else
@@ -109,7 +151,6 @@ public:
 private:
 	HP_Bottle bottle_ = HP_Bottle();
 	int mana_ = 100;
-	int health_ = 100;
 	int health_add_coef_ = 10;
 	float time_passed_ = 0;
 	float time_after_getting_damage_ = 0;
