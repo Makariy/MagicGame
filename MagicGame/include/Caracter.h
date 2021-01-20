@@ -1,6 +1,7 @@
 #pragma once 
 #include "Map.h"
 #include <exception>
+#include <fstream>
 
 
 #ifndef ANIMATION_H
@@ -46,6 +47,7 @@ public:
 	static void AddCaracter(Caracter* caracter) {
 		Caracter::caracters.push_back(caracter);
 	}
+
 	static bool RemoveCaracter(Caracter* caracter) {
 		for (auto iter = Caracter::caracters.begin(); iter < Caracter::caracters.end(); iter++) {
 			if (*iter == caracter) {

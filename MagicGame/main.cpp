@@ -113,7 +113,8 @@ public:
 private:
 	Player player_ = Player(100, 50);
 	Map* map_;
-	olc::Sprite* background_sprite_ = new olc::Sprite("images/First-location1.png");
+	std::string bg_name_ = "images/First-location1";
+	olc::Sprite* background_sprite_ = new olc::Sprite(bg_name_ + ".png");
 	vector<olc::Sprite*> player_sprites_;
 	vector<Enemy*> enemys_;
 	vector<Item> items_list_;
@@ -133,9 +134,9 @@ public:
 		player_sprites_.push_back(new olc::Sprite(player_.GetStandSprite()));
 		player_sprites_.push_back(new olc::Sprite(player_.GetWalkSprite()));
 
-		enemys_.push_back(new Enemy(300, 100));
-
 		map_ = new Map(background_sprite_);
+		Enemy::InitEnemys(map_->GetBackgroundName());
+
 
 		for (Enemy* enemy : enemys_)
 			Caracter::AddCaracter(enemy);
@@ -174,7 +175,7 @@ public:
 		DrawGun();
 		DrawHPStatistics();
 		
-		DrawMapBorders();
+		//DrawMapBorders();
 
 		return true;
 	}
@@ -184,20 +185,24 @@ private:
 		for (Caracter* enemy : Caracter::caracters) {
 			olc::Sprite* sprite = enemy->animation.GetSprite();
 			enemy->Update(sprite, time);
-			DrawCaracter(sprite, enemy->GetPosition());
+			DrawCaracter(sprite, enemy->GetPosition(), enemy->GetNowSide());
 		}
 	}
 
 	//Нарисовать всех персонажей находящихся на карте 
-	void DrawCaracter(olc::Sprite* sprite, Point pos) {
+	void DrawCaracter(olc::Sprite* sprite, Point pos, Side side) {
 		for (int x = 0; x < sprite->width; x++) {
 			for (int y = 0; y < sprite->height; y++) {
-				olc::Pixel p = sprite->GetPixel(x, y);
+				olc::Pixel p;
+				if (side == Side::Left)
+					p = sprite->GetPixel(x, y);
+				else
+					p = sprite->GetPixel(sprite->width - x - 1, y);
 				if (p == sprite->GetPixel(0, 0))
 					continue;
 
-				if(pos.x - map_->GetPadding() +  sprite->width > 0)
-					Draw(pos.x + x - map_->GetPadding(), pos.y + y, p);
+				if (pos.x - map_->GetPadding() + sprite->width > 0) 
+					Draw(pos.x + x - map_->GetPadding(), pos.y + y, p);				
 			}
 		}
 	}

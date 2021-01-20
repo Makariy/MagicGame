@@ -97,10 +97,10 @@ private:
 	//Инициализировать все предметы на карте( коробки всё такое )
 	void m_InitItems() {
 		std::fstream stream;
-		stream.open(bg_name_  + ".bin");
 
 		std::string str;
 		try {
+			stream.open(bg_name_  + ".bin");
 			while (getline(stream, str)) {
 				char p1, p2, minus;
 				char coma;
@@ -281,6 +281,10 @@ public:
 	//Возвращает спрайт бэкграунда
 	inline olc::Sprite* GetBackGroundSprite() {
 		return background_sprite_;
+	}
+
+	inline std::string GetBackgroundName() {
+		return bg_name_;
 	}
 	//Возвращает все предметы прикреплённые к карте
 	inline std::vector<Item>& GetItems() {
