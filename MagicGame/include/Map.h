@@ -19,6 +19,8 @@
 #endif
 
 
+
+
 //Высота и ширина экрана
 constexpr int screen_width = 820;
 constexpr int screen_height = 430;
@@ -253,11 +255,16 @@ public:
 		return false;
 	}
 
-	static bool IsBetween(Point p, Point p1, Point p2, int width = 0, int height = 0) {
+	static bool IsBetween(Point p, Point p1, Point p2, Side& side, int width = 0, int height = 0) {
 		for (int x = p.x; x < p.x + width; x++)
 			for (int y = p.y; y < p.y + height; y++)
-				if (p1.x <= x && x <= p2.x && p1.y <= y && y <= p2.y)
+				if (p1.x <= x && x <= p2.x && p1.y <= y && y <= p2.y) {
+					if (x >= p.x + (width / 2))
+						side = Side::Left;
+					else if (x < p.x + (width / 2))
+						side = Side::Right;
 					return true;
+				}
 		return false;
 	}
 

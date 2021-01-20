@@ -11,23 +11,23 @@ public:
 
 
 	void Update(olc::Sprite* sprite, float time) override {
-		if (Move(side, sprite, time)) {}
-		else if (side = Side::Left) {
-			side = Side::Right;
+		if (Move(NowSide, sprite, time)) {}
+		else if (NowSide = Side::Left) {
+			NowSide = Side::Right;
 			distance_done = distance_to_do - distance_done;
 		}
 		else {
-			side = Side::Left;
+			NowSide = Side::Left;
 		}
-		if (side == Side::Left)
+		if (NowSide == Side::Left)
 			distance_done -= 1;
 		else
 			distance_done += 1;
-		if (distance_done > distance_to_do && side == Side::Right)
-			side = Side::Left;
+		if (distance_done > distance_to_do && NowSide == Side::Right)
+			NowSide = Side::Left;
 
-		else if (distance_done < 0 && side == Side::Left)
-			side = Side::Right;
+		else if (distance_done < 0 && NowSide == Side::Left)
+			NowSide = Side::Right;
 		UpdatePosition(sprite, time);
 	}
 

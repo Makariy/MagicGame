@@ -54,10 +54,13 @@ public:
 
 			bottle_.SetHealth(health_);
 		}
-		Caracter* caracter = Caracter::CheckIfTouchesCaracter(GetPosition(), animation.GetNowSprite());
+
+		Side side;
+
+		Caracter* caracter = Caracter::CheckIfTouchesCaracter(GetPosition(), animation.GetNowSprite(), side);
 		if (caracter) {
 			Damage(10);
-			BounceOff(caracter->GetNowSide());
+			BounceOff(side);
 		}
 
 		gun.Update(time);
@@ -99,7 +102,7 @@ public:
 		// Начать CallDown
 		move_instruction_.is_on_calldown = true;
 		Move(Side::Jump, animation.GetNowSprite(), power / 7);
-		MoveFor(10, side == Side::Right ? Side::Left : Side::Right, power / 20);
+		MoveFor(10, side, power / 20);
 	}
 
 	void PlayerMove(Side side, olc::Sprite* sprite, float time) {

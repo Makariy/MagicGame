@@ -39,23 +39,6 @@
 
 
 
-
-
-/*
-
-
-		Нужно на писать обновление пушки через сам класс пушки и прибрать код
-
-
-*/
-
-
-
-
-
-
-
-
 #ifndef OLC_PGE_APPLICATION
 	#define OLC_PGE_APPLICATION
 #endif 

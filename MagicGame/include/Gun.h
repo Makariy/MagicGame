@@ -61,7 +61,9 @@ public:
 				distance_ = 0;
 			}
 		}
-		Caracter* caracter = Caracter::CheckIfTouchesCaracter(Point(x_, y_), gun_sprite_);
+
+		Side side;
+		Caracter* caracter = Caracter::CheckIfTouchesCaracter(Point(x_, y_), gun_sprite_, side);
 		if (caracter) {
 			Caracter::RemoveCaracter(caracter);
 			player_->atacking = false;

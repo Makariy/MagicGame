@@ -16,12 +16,6 @@
 #endif 
 
 
-enum Side {
-	Up,
-	Jump,
-	Right,
-	Left
-};
 
 
 
@@ -62,11 +56,12 @@ public:
 		return false;
 	}
 
-	static Caracter* CheckIfTouchesCaracter(Point p, olc::Sprite* sprite) {
+	static Caracter* CheckIfTouchesCaracter(Point p, olc::Sprite* sprite, Side& side) {
+
 		for (Caracter* car : Caracter::caracters) {
 			olc::Sprite* car_sprite = car->animation.GetNowSprite();
 			if (Map::IsBetween(p, car->GetPosition(), Point(car->GetPosition().x + car_sprite->width, car->GetPosition().y + car_sprite->height),
-				sprite->width, sprite->height))
+				side, sprite->width, sprite->height))
 				return car;
 		}
 		return NULL;
@@ -231,8 +226,6 @@ protected:
 
 	int health_ = 100;
 	float speed_ = 2.0f;
-
-	Side side = Side::Right;
 
 	//НЕ ОТОБРАЖАЕТ СКОРОСТЬ ПАДЕНИЯ КАК КОНСТАНТУ 
 	//Отображает корость падения на днный момент 
