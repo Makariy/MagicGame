@@ -25,7 +25,7 @@ public:
 	Caracter() : pos_x_(0), pos_y_(0) {  }
 	Caracter(int x, int y) :pos_x_(x), pos_y_(y) {  }
 	Caracter(Point p) : pos_x_(p.x), pos_y_(p.y) {  }
-	~Caracter() {  }
+	virtual ~Caracter() {  }
 
 	struct MoveInstruction {
 		Side side; // Сторона для движения
@@ -52,6 +52,7 @@ public:
 		for (auto iter = Caracter::caracters.begin(); iter < Caracter::caracters.end(); iter++) {
 			if (*iter == caracter) {
 				Caracter::caracters.erase(iter);
+				delete caracter;
 				return true;
 			}
 		}

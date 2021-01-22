@@ -65,6 +65,14 @@ public:
 		UpdatePosition(sprite, time);
 	}
 
+	~Enemy() override {
+		for (auto car_ptr = Caracter::caracters.begin(); car_ptr < Caracter::caracters.end(); car_ptr++) {
+			if (*car_ptr == this) {
+				Caracter::caracters.erase(car_ptr);
+			}
+		}
+	}
+
 protected:
 	void Construct(const std::string& name) {
 		speed_ = 1.0f;

@@ -279,7 +279,7 @@ public:
 
 public:
 	//Возвращает спрайт бэкграунда
-	inline olc::Sprite* GetBackGroundSprite() {
+	inline olc::Sprite* GetBackgroundSprite() {
 		return background_sprite_;
 	}
 

@@ -41,13 +41,16 @@
     <ClInclude Include="include\lib\olcPixelGameEngine.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="HP-Bottle.h">
+    <ClInclude Include="include\Grounds.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
+    <ClInclude Include="include\HP-Bottle.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Grounds.h">
+    <ClInclude Include="include\Enemy.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelsLoader.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
