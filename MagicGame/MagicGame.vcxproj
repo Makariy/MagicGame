@@ -29,10 +29,10 @@
     <ClInclude Include="include\Gun.h" />
     <ClInclude Include="include\HP-Bottle.h" />
     <ClInclude Include="include\Item.h" />
+    <ClInclude Include="include\LevelsLoader.h" />
     <ClInclude Include="include\lib\olcPixelGameEngine.h" />
     <ClInclude Include="include\Map.h" />
     <ClInclude Include="include\Player.h" />
-    <ClInclude Include="LevelsLoader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

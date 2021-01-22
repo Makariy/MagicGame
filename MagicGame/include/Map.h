@@ -8,6 +8,7 @@
 #include "Animation.h"
 #include "Item.h"
 #include "Grounds.h"
+#include "LevelsLoader.h"
 
 
 #ifndef ANIMATION_H
@@ -56,7 +57,7 @@ private:
 
 		std::fstream stream;
 		try {
-			stream.open(bg_name_ + ".bin");
+			stream.open(levels_loader_.GetLevelDataFile());
 
 			char par1;
 			while (stream >> par1) {
@@ -100,7 +101,7 @@ private:
 
 		std::string str;
 		try {
-			stream.open(bg_name_  + ".bin");
+			stream.open(levels_loader_.GetLevelDataFile());
 			while (getline(stream, str)) {
 				char p1, p2, minus;
 				char coma;
@@ -126,6 +127,10 @@ private:
 		
 	}
 
+	
+	void m_InitLevelEnd() {}
+
+
 	//Функция просто для облегчения конструктора
 	//Инициализирует границы карты и предметы карты
 	void m_InitAll() {
@@ -137,22 +142,10 @@ public:
 	
 	//Конструктор
 	Map() {
-		background_sprite_ = new olc::Sprite(bg_name_);
+		background_sprite_ = new olc::Sprite(levels_loader_.GetCurrentLevelImage());
 		m_InitAll();
 	}
 
-	//Конструктор
-	Map(std::string& sprite) {
-		background_sprite_ = new olc::Sprite(sprite);
-		m_InitAll();
-
-	}
-
-	//Конструктор
-	Map(olc::Sprite* sprite) {
-		background_sprite_ = sprite;
-		m_InitAll();
-	} 
 	//Деструктор
 	//Пока удаляю только border_
 	~Map() {
@@ -296,12 +289,14 @@ private:
 	//Отражает границы на карте, индексируя по X и Y возвращает тип поверзности на этой точке 
 	std::vector<Grounds*> border_;
 	//Имя файла с картой, изменяется в качестве параметра в конструкторе
-	std::string bg_name_ = "images/background-normal";
+	std::string bg_name_ = "images/Level1";
 	//Спрайт карты
 	olc::Sprite* background_sprite_;
 	//Все предметы прикреплённые к карте
 	std::vector<Item> items_;
 
+	LevelsLoader levels_loader_ = LevelsLoader();
+	
 	//Ширина и высота всей карты ( не экрана )
 	int width_;
 	int height_;

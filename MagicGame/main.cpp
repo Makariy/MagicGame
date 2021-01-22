@@ -113,8 +113,7 @@ public:
 private:
 	Player player_ = Player(100, 50);
 	Map* map_;
-	std::string bg_name_ = "images/First-location1";
-	olc::Sprite* background_sprite_ = new olc::Sprite(bg_name_ + ".png");
+
 	vector<olc::Sprite*> player_sprites_;
 	vector<Enemy*> enemys_;
 	vector<Item> items_list_;
@@ -134,7 +133,7 @@ public:
 		player_sprites_.push_back(new olc::Sprite(player_.GetStandSprite()));
 		player_sprites_.push_back(new olc::Sprite(player_.GetWalkSprite()));
 
-		map_ = new Map(background_sprite_);
+		map_ = new Map();
 		Enemy::InitEnemys(map_->GetBackgroundName());
 
 
@@ -227,7 +226,7 @@ private:
 				if(map_moved)
 					Draw(x + left_padding_, point.y + y, p);
 				else{
-					int position = background_sprite_->width - player_.GetPosition().x;
+					int position = map_->GetBackgroundSprite()->width - player_.GetPosition().x;
 					if (position < screen_width)
 					{
 						position = screen_width - position;
@@ -247,14 +246,14 @@ private:
 	bool FillScreen() {
 
 		bool map_moved = false;
-
-		int y_pad = background_sprite_->height - ScreenHeight();
+		olc::Sprite* sprite = map_->GetBackgroundSprite();
+		int y_pad = sprite->height - ScreenHeight();
 		int x_pad = 0;
 
-		if (background_sprite_->width - player_.GetPosition().x + left_padding_ > 0 &&
+		if (sprite->width - player_.GetPosition().x + left_padding_ > 0 &&
 			player_.GetPosition().x - left_padding_ > 0) {
-			if (player_.GetPosition().x + screen_width - left_padding_ >= background_sprite_->width) {
-				x_pad = background_sprite_->width - screen_width;
+			if (player_.GetPosition().x + screen_width - left_padding_ >= sprite->width) {
+				x_pad = sprite->width - screen_width;
 			}
 			//„и нет
 			else {
@@ -266,7 +265,7 @@ private:
 
 		for (int x = 0; x < ScreenWidth(); ++x) {
 			for (int y = 0; y < ScreenHeight(); ++y) {
-				Draw(x, y, background_sprite_->GetPixel(x + x_pad, y + y_pad));
+				Draw(x, y, sprite->GetPixel(x + x_pad, y + y_pad));
 			}
 		}
 		return map_moved;
