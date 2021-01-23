@@ -65,6 +65,7 @@
 #include <strstream>
 #include <algorithm>
 #include <string>
+#include <functional>
 
 using namespace std;
 
@@ -115,7 +116,6 @@ private:
 	Map* map_;
 
 	vector<olc::Sprite*> player_sprites_;
-	vector<Enemy*> enemys_;
 	vector<Item> items_list_;
 
 	olc::Pixel background_color_ = olc::Pixel(0, 0, 0);
@@ -134,11 +134,9 @@ public:
 		player_sprites_.push_back(new olc::Sprite(player_.GetWalkSprite()));
 
 		map_ = new Map();
-		Enemy::InitEnemys(map_->GetBackgroundName());
+		map_->SetCallBack(std::bind(&Game::OnNextLevel, this));
 
-
-		for (Enemy* enemy : enemys_)
-			Caracter::AddCaracter(enemy);
+		Enemy::InitEnemys(map_->GetLevelLoader().GetLevelDataFile());
 
 		for (Item i : map_->GetItems())
 			items_list_.push_back(i);
@@ -168,6 +166,10 @@ public:
 		bool map_moved = 
 		  FillScreen();
 
+		for (int x = map_->GetEndPoint().x; x < map_->GetEndPoint().x+5; x++)
+			for (int y = map_->GetEndPoint().y; y < map_->GetEndPoint().y+5; y++)
+				Draw(x-2 - map_->GetPadding(), y-2, olc::RED);
+
 		DrawPlayer(player_sprite, map_moved);
 		UpdateAndDrawCaracters(fElapsedTime);
 		DrawItems();
@@ -180,6 +182,21 @@ public:
 	}
 
 private:
+
+	void OnNextLevel() {
+
+		Caracter::RemoveAllCaractres();
+		Enemy::InitEnemys(map_->GetLevelLoader().GetLevelDataFile());
+
+		for (Item i : map_->GetItems())
+			items_list_.push_back(i);
+
+		Caracter::AttachAllCaractersToMap(map_);
+
+		player_.Teleport(Point(100, 100));
+
+	}
+
 	void UpdateAndDrawCaracters(float time) {
 		for (Caracter* enemy : Caracter::caracters) {
 			olc::Sprite* sprite = enemy->animation.GetSprite();

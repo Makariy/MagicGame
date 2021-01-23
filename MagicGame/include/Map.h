@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <functional>
 #include "lib/olcPixelGameEngine.h"
 #include "Animation.h"
 #include "Item.h"
@@ -128,7 +129,29 @@ private:
 	}
 
 	
-	void m_InitLevelEnd() {}
+	void m_InitLevelEnd() {
+		std::fstream stream;
+		std::string str;
+		try {
+			stream.open(levels_loader_.GetLevelDataFile());
+			while (getline(stream, str)) {
+				std::stringstream ss(str);
+
+				char end1, end2, end3;
+				char par1, par2;
+				char coma;
+				int x, y;
+
+				ss >> end1 >> end2 >> end3 >> par1 >> x >> coma >> y >> par2;
+				if (end1 == 'e' && end2 == 'n' && end3 == 'd' && par1 == '(' && par2 == ')' && coma == ',')
+					level_end_ = Point(x, y);
+			}
+		}
+		catch (std::exception e) {
+			std::cout << "Error to open file " << levels_loader_.GetLevelDataFile() << " in function m_InitLevelEnd in class Map\n";
+			e.what();
+		}
+	}
 
 
 	//Функция просто для облегчения конструктора
@@ -136,6 +159,7 @@ private:
 	void m_InitAll() {
 		this->m_InitBorders();
 		this->m_InitItems();
+		this->m_InitLevelEnd();
 	}
 
 public:
@@ -196,6 +220,7 @@ public:
 	}
 
 public:
+
 	//Проверить попадает ли спрайт из параметра который находится на точке Point на этой карте 
 	//на другой объект, если попадает то функция возвращает этот объект. Попасть спрайт может двумя краями либо серединой
 	//Непонятный код но после тестирования выяснилось что работает.
@@ -242,6 +267,25 @@ public:
 		return item;
 	}
 
+	bool CheckIfOnFinish(Point p, int width, int height) {
+		for (int x = p.x; x < p.x + width; x++)
+			for (int y = p.y; y < p.y + height; y++)
+				if (level_end_.x == x && level_end_.y == y) {
+					RestoreMap();
+					return true;
+				}
+		return false;
+	}
+
+	void RestoreMap() {
+		levels_loader_.IncreaseLevelCounter();
+		SetPadding(0);
+		background_sprite_ = new olc::Sprite(levels_loader_.GetCurrentLevelImage());
+		DeleteBorders();
+		m_InitAll();
+		callback_();
+	}
+
 	static bool IsBetween(Point p, int x1, int y1, int x2, int y2) {
 		if (p.x >= x1 && p.x <= x2 && p.y >= y1 && p.y <= y2)
 			return true;
@@ -262,12 +306,25 @@ public:
 	}
 
 public:
+
+	void SetCallBack(std::function<void()> func) {
+		callback_ = func;
+	}
+
 	inline void SetPadding(int padding) {
 		now_padding_ = padding;
 	}
 
 	inline int GetPadding() {
 		return now_padding_;
+	}
+
+	inline Point GetEndPoint() {
+		return level_end_;
+	}
+
+	inline LevelsLoader GetLevelLoader() {
+		return levels_loader_;
 	}
 
 public:
@@ -286,6 +343,12 @@ public:
 
 
 private:
+	void DeleteBorders() {
+		for (int x = 0; x < height_; x++)
+			delete border_[x];
+		border_.clear();
+	}
+
 	//Отражает границы на карте, индексируя по X и Y возвращает тип поверзности на этой точке 
 	std::vector<Grounds*> border_;
 	//Имя файла с картой, изменяется в качестве параметра в конструкторе
@@ -295,7 +358,11 @@ private:
 	//Все предметы прикреплённые к карте
 	std::vector<Item> items_;
 
+	Point level_end_;
+
 	LevelsLoader levels_loader_ = LevelsLoader();
+
+	std::function<void()> callback_;
 	
 	//Ширина и высота всей карты ( не экрана )
 	int width_;

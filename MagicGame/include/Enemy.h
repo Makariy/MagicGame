@@ -14,13 +14,12 @@ public:
 	Enemy(Point p, const std::string& str) : Caracter(p) { Construct(str); }
 
 
-	//File name without expension of the file
 	static void InitEnemys(const std::string& file_name) {
 
 		std::fstream stream;
 		try {
 			std::string str;
-			stream.open(file_name + ".bin");
+			stream.open(file_name);
 
 			while (getline(stream, str)) {
 

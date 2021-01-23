@@ -1,23 +1,24 @@
 ﻿  main.cpp
 C:\Users\makar\source\repos\MagicGame\MagicGame\include\Animation.h(33,18): warning C4018: >=: несоответствие типов со знаком и без знака
 C:\Users\makar\source\repos\MagicGame\MagicGame\include\Animation.h(36,16): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\makar\source\repos\MagicGame\MagicGame\include\LevelsLoader.h(41,10): warning C4834: отмена возвращаемого значения функции с атрибутом "nodiscard"
-C:\Users\makar\source\repos\MagicGame\MagicGame\include\Map.h(152,21): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\makar\source\repos\MagicGame\MagicGame\include\Map.h(193,21): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\makar\source\repos\MagicGame\MagicGame\include\Map.h(207,29): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\makar\source\repos\MagicGame\MagicGame\include\Map.h(152,10): warning C4834: отмена возвращаемого значения функции с атрибутом "nodiscard"
+C:\Users\makar\source\repos\MagicGame\MagicGame\include\Map.h(176,21): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\makar\source\repos\MagicGame\MagicGame\include\Map.h(217,21): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\makar\source\repos\MagicGame\MagicGame\include\Map.h(232,29): warning C4018: <: несоответствие типов со знаком и без знака
 C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(26,32): warning C4244: инициализация: преобразование "int" в "float", возможна потеря данных
 C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(27,28): warning C4244: инициализация: преобразование "int" в "float", возможна потеря данных
-C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(91,16): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
-C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(113,21): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
-C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(114,1): warning C4244: +=: преобразование "float" в "int", возможна потеря данных
-C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(115,1): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
-C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(156,12): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(180,10): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(189,10): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(199,10): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(98,16): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(120,21): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(121,1): warning C4244: +=: преобразование "float" в "int", возможна потеря данных
+C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(122,1): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
+C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(163,12): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(187,10): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(196,10): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\makar\source\repos\MagicGame\MagicGame\include\Caracter.h(206,10): warning C4244: =: преобразование "double" в "int", возможна потеря данных
 C:\Users\makar\source\repos\MagicGame\MagicGame\include\Gun.h(48,1): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
 C:\Users\makar\source\repos\MagicGame\MagicGame\include\Gun.h(49,1): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
-C:\Users\makar\source\repos\MagicGame\MagicGame\main.cpp(147,21): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\makar\source\repos\MagicGame\MagicGame\include\Player.h(91,13): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\makar\source\repos\MagicGame\MagicGame\main.cpp(145,21): warning C4018: <: несоответствие типов со знаком и без знака
   Создание кода
   Создание кода завершено
   MagicGame.vcxproj -> C:\Users\makar\source\repos\MagicGame\Release\MagicGame.exe

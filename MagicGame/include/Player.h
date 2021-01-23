@@ -40,6 +40,8 @@ public:
 public:
 	void Update(olc::Sprite* sprite, float time) override {
 		
+		map_->CheckIfOnFinish(GetPosition(), animation.GetNowSprite()->width, animation.GetNowSprite()->height);
+
 		time_passed_ += time;
 
 		if(time_after_getting_damage_ < 1)
@@ -83,6 +85,11 @@ public:
 		}
 
 		UpdatePosition(sprite, time);
+	}
+
+	void Teleport(Point p) {
+		pos_x_ = p.x;
+		pos_y_ = p.y;
 	}
 
 	void MoveFor(int times, Side side, float time, olc::Sprite* sprite = NULL) {

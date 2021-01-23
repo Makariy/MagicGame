@@ -48,6 +48,13 @@ public:
 		Caracter::caracters.push_back(caracter);
 	}
 
+	static void RemoveAllCaractres() {
+
+		for (Caracter* c : Caracter::caracters)
+			delete c;
+		Caracter::caracters.clear();
+	}
+
 	static bool RemoveCaracter(Caracter* caracter) {
 		for (auto iter = Caracter::caracters.begin(); iter < Caracter::caracters.end(); iter++) {
 			if (*iter == caracter) {
