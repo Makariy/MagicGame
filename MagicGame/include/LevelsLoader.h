@@ -27,5 +27,4 @@ public:
 	std::string GetCurrentLevelImage() {
 		return GetPathToLevel() + ".png";
 	}
-
 };

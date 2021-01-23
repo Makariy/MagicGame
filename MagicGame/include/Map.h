@@ -281,7 +281,7 @@ public:
 		levels_loader_.IncreaseLevelCounter();
 		SetPadding(0);
 		background_sprite_ = new olc::Sprite(levels_loader_.GetCurrentLevelImage());
-		DeleteBorders();
+		DeleteAll();
 		m_InitAll();
 		callback_();
 	}
@@ -343,10 +343,12 @@ public:
 
 
 private:
-	void DeleteBorders() {
+	void DeleteAll() {
 		for (int x = 0; x < height_; x++)
 			delete border_[x];
 		border_.clear();
+
+		items_.clear();
 	}
 
 	//ќтражает границы на карте, индексиру€ по X и Y возвращает тип поверзности на этой точке 

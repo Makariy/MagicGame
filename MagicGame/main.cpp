@@ -116,7 +116,6 @@ private:
 	Map* map_;
 
 	vector<olc::Sprite*> player_sprites_;
-	vector<Item> items_list_;
 
 	olc::Pixel background_color_ = olc::Pixel(0, 0, 0);
 
@@ -137,10 +136,6 @@ public:
 		map_->SetCallBack(std::bind(&Game::OnNextLevel, this));
 
 		Enemy::InitEnemys(map_->GetLevelLoader().GetLevelDataFile());
-
-		for (Item i : map_->GetItems())
-			items_list_.push_back(i);
-
 
 		for (int i = 0; i < player_sprites_.size(); i++)
 			player_.animation.AddSprite(player_sprites_[i]);
@@ -187,9 +182,6 @@ private:
 
 		Caracter::RemoveAllCaractres();
 		Enemy::InitEnemys(map_->GetLevelLoader().GetLevelDataFile());
-
-		for (Item i : map_->GetItems())
-			items_list_.push_back(i);
 
 		Caracter::AttachAllCaractersToMap(map_);
 
@@ -290,7 +282,7 @@ private:
 
 	//Нарисовать все предметы находящиеся на карте  
 	void DrawItems() {
-		for (Item item : items_list_) {
+		for (Item item : map_->GetItems()) {
 			for (int x = 0; x < item.Width(); ++x) {
 				for (int y = 0; y < item.Height(); ++y) {
 					olc::Pixel p = item.GetSprite()->GetPixel(x, y);
@@ -367,12 +359,6 @@ private:
 	//Убирает предмет с карты и затем из массива всех предметов, тем самым пепрестаёт его рисовать и учитывать 
 	void RemoveItem(Item item) {
 		map_->RemoveSprite(item);
-		for (auto i = items_list_.begin(); i < items_list_.end(); i++) {
-			if (i->GetPosition() == item.GetPosition()) {
-				items_list_.erase(i);
-				return;
-			}
-		}
 	}
 
 	void DrawMapBorders() {
