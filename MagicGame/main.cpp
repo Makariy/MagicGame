@@ -59,6 +59,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Item.h"
+#include "LoadingScreen.h"
 
 #include <fstream>
 #include <ostream>
@@ -114,8 +115,7 @@ public:
 private:
 	Player player_ = Player(100, 50);
 	Map* map_;
-
-	vector<olc::Sprite*> player_sprites_;
+	LoadingScreen loading_screen_ = LoadingScreen();
 
 	olc::Pixel background_color_ = olc::Pixel(0, 0, 0);
 
@@ -129,16 +129,10 @@ private:
 public:
 	bool OnUserCreate() override {
 
-		player_sprites_.push_back(new olc::Sprite(player_.GetStandSprite()));
-		player_sprites_.push_back(new olc::Sprite(player_.GetWalkSprite()));
-
 		map_ = new Map();
 		map_->SetCallBack(std::bind(&Game::OnNextLevel, this));
 
-		Enemy::InitEnemys(map_->GetLevelLoader().GetLevelDataFile());
-
-		for (int i = 0; i < player_sprites_.size(); i++)
-			player_.animation.AddSprite(player_sprites_[i]);
+		Enemy::InitEnemys(map_->GetLevelLoader()->GetLevelDataFile());
 
 		player_.AttachToMap(map_);
 		Caracter::AttachAllCaractersToMap(map_);
@@ -150,6 +144,13 @@ public:
 	//Эта функция обновляет события и вызывает функции для отрисовки других спрайтов 
 	bool OnUserUpdate(float fElapsedTime) override {
 
+		if (loading_screen_.IsGoing()) {
+			loading_screen_.Update(fElapsedTime);
+			DrawLoadingScreen();
+
+			return true;
+		}
+
 		CheckKeyboardEvents(fElapsedTime);
 
 		olc::Sprite* player_sprite = player_.animation.GetSprite();
@@ -160,10 +161,6 @@ public:
 
 		bool map_moved = 
 		  FillScreen();
-
-		for (int x = map_->GetEndPoint().x; x < map_->GetEndPoint().x+5; x++)
-			for (int y = map_->GetEndPoint().y; y < map_->GetEndPoint().y+5; y++)
-				Draw(x-2 - map_->GetPadding(), y-2, olc::RED);
 
 		DrawPlayer(player_sprite, map_moved);
 		UpdateAndDrawCaracters(fElapsedTime);
@@ -180,13 +177,14 @@ private:
 
 	void OnNextLevel() {
 
+		loading_screen_.Start();
+
 		Caracter::RemoveAllCaractres();
-		Enemy::InitEnemys(map_->GetLevelLoader().GetLevelDataFile());
+		Enemy::InitEnemys(map_->GetLevelLoader()->GetLevelDataFile());
 
 		Caracter::AttachAllCaractersToMap(map_);
 
 		player_.Teleport(Point(100, 100));
-
 	}
 
 	void UpdateAndDrawCaracters(float time) {
@@ -356,12 +354,54 @@ private:
 		}
 	}
 
+
+	void DrawLoadingScreen() {
+
+		for (int x = 0; x < ScreenWidth(); x++)
+			for (int y = 0; y < ScreenHeight(); y++)
+				Draw(x, y, olc::BLACK);
+
+		int screen_middle_x = (ScreenWidth() / 2) - (player_.GetBottle().GetSprite()->width / 2);
+		int screen_middle_y = (ScreenHeight() / 2) - (player_.GetBottle().GetSprite()->height / 2);
+
+		olc::Sprite* bottle = player_.GetBottle().GetSprite();
+
+		for (int x = 0; x < bottle->width; x++) {
+			for (int y = 0; y < bottle->height; y++) {
+				olc::Pixel p = player_.GetBottle().GetSprite()->GetPixel(x, y);
+
+				if (p == bottle->GetPixel(0, 0))
+					continue;
+
+				Draw(screen_middle_x + x, screen_middle_y + y, p);
+			}
+		}
+
+		HP_Bottle botl = player_.GetBottle();
+
+		for (int x = botl.GetStart().x; x < loading_screen_.GetTimePassed(); x++) {
+			for (int y = botl.GetStart().y; y < botl.GetEnd().y; y++) {
+				olc::Pixel p = bottle->GetPixel(x, y);
+				if (p != bottle->GetPixel(0, 0))
+					continue;
+				Draw(screen_middle_x + x, screen_middle_y + y, olc::RED);
+			}
+		}
+		
+	}
+
 	//Убирает предмет с карты и затем из массива всех предметов, тем самым пепрестаёт его рисовать и учитывать 
 	void RemoveItem(Item item) {
 		map_->RemoveSprite(item);
 	}
 
+	//Функция для отладки 
+	//Рисует края карты и все предметы, конец карты, 
 	void DrawMapBorders() {
+
+		for (int x = map_->GetEndPoint().x; x < map_->GetEndPoint().x + 5; x++)
+			for (int y = map_->GetEndPoint().y; y < map_->GetEndPoint().y + 5; y++)
+				Draw(x - 2 - map_->GetPadding(), y - 2, olc::RED);
 
 		for (int x = 0; x < screen_width; x++) {
 			for (int y = 0; y < screen_height; y++) {
@@ -387,15 +427,15 @@ private:
 
 	//Проверяет действия игрока, если игрок что то нажал то вызывает соответсвующую функцию для класса Player
 	void CheckKeyboardEvents(float fElapsedTime) {
-		if (GetKey(olc::W).bHeld)player_.PlayerMove(Side::Up, player_sprites_[0], fElapsedTime);
-		if (GetKey(olc::W).bPressed)player_.PlayerMove(Side::Jump, player_sprites_[0], fElapsedTime);
+		if (GetKey(olc::W).bHeld)player_.PlayerMove(Side::Up, player_.animation.GetNowSprite(), fElapsedTime);
+		if (GetKey(olc::W).bPressed)player_.PlayerMove(Side::Jump, player_.animation.GetNowSprite(), fElapsedTime);
 		if (GetKey(olc::A).bHeld) {
-			player_.PlayerMove(Side::Left, player_sprites_[0], fElapsedTime);
+			player_.PlayerMove(Side::Left, player_.animation.GetNowSprite(), fElapsedTime);
 			player_.NowSide = Side::Left;
 			player_.animation.AddTime(fElapsedTime);
 		}
 		if (GetKey(olc::D).bHeld) {
-			player_.PlayerMove(Side::Right, player_sprites_[0], fElapsedTime);
+			player_.PlayerMove(Side::Right, player_.animation.GetNowSprite(), fElapsedTime);
 			player_.NowSide = Side::Right;
 			player_.animation.AddTime(fElapsedTime);
 		}

@@ -76,10 +76,8 @@ protected:
 	void Construct(const std::string& name) {
 		speed_ = 1.0f;
 		health_ = 10;
-		sprite_stand_ = "images/" + name;
-		sprite_walk_ = "images/" + name;
-		animation.AddSprite(new olc::Sprite(sprite_stand_));
-		animation.AddSprite(new olc::Sprite(sprite_walk_));
+
+		SetSprites({ "images/" + name , "images/" + name });
 	}
 
 private:

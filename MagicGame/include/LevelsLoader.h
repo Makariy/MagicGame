@@ -8,7 +8,7 @@ private:
 	int now_level_itr;
 	std::string path_ = "levels/";
 
-	std::string GetPathToLevel() {
+	std::string GetPathToLevel() const {
 		return (path_ + "level_" + std::to_string(now_level_itr) + "/Level" + std::to_string(now_level_itr));
 	}
 
@@ -20,11 +20,11 @@ public:
 		now_level_itr++;
 	}
 
-	std::string GetLevelDataFile() {
+	std::string GetLevelDataFile() const {
 		return GetPathToLevel() + "_data.bin";
 	}
 
-	std::string GetCurrentLevelImage() {
+	std::string GetCurrentLevelImage() const {
 		return GetPathToLevel() + ".png";
 	}
 };

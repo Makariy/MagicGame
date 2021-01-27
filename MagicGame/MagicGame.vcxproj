@@ -33,6 +33,7 @@
     <ClInclude Include="include\lib\olcPixelGameEngine.h" />
     <ClInclude Include="include\Map.h" />
     <ClInclude Include="include\Player.h" />
+    <ClInclude Include="LoadingScreen.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

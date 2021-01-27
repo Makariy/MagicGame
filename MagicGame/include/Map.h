@@ -179,7 +179,7 @@ public:
 
 	//Принимает х и у которые являются позициями спрайта
 	//Возвращает тип поверхности на которую попадает этот спрайт
-	Grounds At(int x, int y) {
+	Grounds At(int x, int y) const {
 		if (x < 0 || x > width_ - 1 || y < 0 || y > height_ - 1)
 			return Grounds::Normal;
 		return border_[x][y];
@@ -319,12 +319,12 @@ public:
 		return now_padding_;
 	}
 
-	inline Point GetEndPoint() {
+	inline Point GetEndPoint() const {
 		return level_end_;
 	}
 
-	inline LevelsLoader GetLevelLoader() {
-		return levels_loader_;
+	inline LevelsLoader* GetLevelLoader() {
+		return &levels_loader_;
 	}
 
 public:
@@ -333,7 +333,7 @@ public:
 		return background_sprite_;
 	}
 
-	inline std::string GetBackgroundName() {
+	inline std::string GetBackgroundName() const {
 		return bg_name_;
 	}
 	//Возвращает все предметы прикреплённые к карте

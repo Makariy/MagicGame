@@ -88,18 +88,21 @@ public:
 	virtual inline float GetSpeed() {
 		return speed_;
 	}
-	virtual inline std::string GetStandSprite() {
-		return sprite_stand_;
-	}
-	virtual inline std::string GetWalkSprite() {
-		return sprite_walk_;
-	}
 	virtual inline Point GetPosition() {
 		return Point(pos_x_, pos_y_);
 	}
 	inline bool IsDead() {
 		return is_dead_;
 	}
+
+
+public:
+
+	void SetSprites(const std::initializer_list<std::string> list) {
+		for (std::string str : list)
+			animation.AddSprite(new olc::Sprite(str));
+	}
+
 
 public:
 
@@ -152,12 +155,6 @@ public:
 		}
 		return false;
 	}
-
-	//Поменять спрайт
-	void ChangeSprite(const std::string& stand, const std::string& walk) {
-		sprite_stand_ = stand;
-		sprite_walk_ = walk;
-	}
 	//Поменять скорость
 	void ChangeSpeed(int num) {
 		speed_ = num;
@@ -184,7 +181,7 @@ public:
 				throw std::runtime_error("Wrong moving side argument in class Cararcter");
 		}
 		if (x > 0) {
-			x = x + time / 0.018;
+			x = x + time / distance_incr_;
 
 			if (this->Touches(x+2, y, sprite))
 				if (this->Touches(x+2, y - 3, sprite))
@@ -193,7 +190,7 @@ public:
 					y = y - 2;
 		}
 		else if (x < 0) {
-			x = x - time / 0.018;
+			x = x - time / distance_incr_;
 
 			if (this->Touches(x - 2, y, sprite)) {
 				if (this->Touches(x - 2, y - 3, sprite))
@@ -236,6 +233,7 @@ protected:
 
 	int health_ = 100;
 	float speed_ = 2.0f;
+	const float distance_incr_ = (1.0f / 56.0f);
 
 	//НЕ ОТОБРАЖАЕТ СКОРОСТЬ ПАДЕНИЯ КАК КОНСТАНТУ 
 	//Отображает корость падения на днный момент 
@@ -244,9 +242,6 @@ protected:
 	float drop_speed_coeficient_ = 0.03f;
 
 	bool is_dead_ = false;
-
-	std::string sprite_stand_;
-	std::string sprite_walk_;
 };
 
 std::vector<Caracter*> Caracter::caracters;

@@ -8,10 +8,10 @@ public:
 	inline olc::Sprite* GetSprite() {
 		return sprite_;
 	}
-	inline Point GetStart() {
+	inline Point GetStart() const  {
 		return Point(hp_start_x_, hp_start_y_);
 	}
-	inline Point GetEnd() {
+	inline Point GetEnd() const {
 		return Point(hp_now_width_, hp_now_height_);
 	}
 	inline void SetHealth(int num) {
