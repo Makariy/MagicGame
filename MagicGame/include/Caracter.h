@@ -28,13 +28,13 @@ public:
 	virtual ~Caracter() {  }
 
 	struct MoveInstruction {
-		Side side; // Сторона для движения
-		float time; // Требуется для функции Move
-		int times; // Количество раз для повторения
+		Side side; // Г‘ГІГ®Г°Г®Г­Г  Г¤Г«Гї Г¤ГўГЁГ¦ГҐГ­ГЁГї
+		float time; // Г’Г°ГҐГЎГіГҐГІГ±Гї Г¤Г«Гї ГґГіГ­ГЄГ¶ГЁГЁ Move
+		int times; // ГЉГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г°Г Г§ Г¤Г«Гї ГЇГ®ГўГІГ®Г°ГҐГ­ГЁГї
 		olc::Sprite* animation; 
 		float call_down = kcall_down;
 
-		float kcall_down = 0.5;
+		float call_down = 0.5;
 
 		bool is_on_calldown = false;
 		bool is_moving_for = false;
@@ -83,7 +83,7 @@ public:
 
 	static std::vector<Caracter*> caracters;
 
-	//Получение всяких свойств
+	//ГЏГ®Г«ГіГ·ГҐГ­ГЁГҐ ГўГ±ГїГЄГЁГµ Г±ГўГ®Г©Г±ГІГў
 public:
 	virtual inline float GetSpeed() {
 		return speed_;
@@ -110,10 +110,10 @@ public:
 		for (Caracter* caracter : caracters)
 			caracter->AttachToMap(map);
 	}
-	//Привязать к карте
+	//ГЏГ°ГЁГўГїГ§Г ГІГј ГЄ ГЄГ Г°ГІГҐ
 	void AttachToMap(Map* m) { this->map_ = m; }
 
-	//Обновляет положение на карте и всякие события 
+	//ГЋГЎГ­Г®ГўГ«ГїГҐГІ ГЇГ®Г«Г®Г¦ГҐГ­ГЁГҐ Г­Г  ГЄГ Г°ГІГҐ ГЁ ГўГ±ГїГЄГЁГҐ Г±Г®ГЎГ»ГІГЁГї 
 	virtual void Update(olc::Sprite* sprite, float time) {
 		UpdatePosition(sprite, time);
 	}
@@ -140,7 +140,7 @@ public:
 		else
 			health_ = max_health_;
 	}
-	//Проверяет если персонаж касается какой то поверхности карты 
+	//ГЏГ°Г®ГўГҐГ°ГїГҐГІ ГҐГ±Г«ГЁ ГЇГҐГ°Г±Г®Г­Г Г¦ ГЄГ Г±Г ГҐГІГ±Гї ГЄГ ГЄГ®Г© ГІГ® ГЇГ®ГўГҐГ°ГµГ­Г®Г±ГІГЁ ГЄГ Г°ГІГ» 
 	bool Touches(int x_pad, int y_pad, olc::Sprite* sprite) {
 		int pos_x = (int)pos_x_;
 		int pos_y = (int)pos_y_;
@@ -155,12 +155,12 @@ public:
 		}
 		return false;
 	}
-	//Поменять скорость
+	//ГЏГ®Г¬ГҐГ­ГїГІГј Г±ГЄГ®Г°Г®Г±ГІГј
 	void ChangeSpeed(int num) {
 		speed_ = num;
 	}
 
-	//Подвинуться, если не может то возвращает false
+	//ГЏГ®Г¤ГўГЁГ­ГіГІГјГ±Гї, ГҐГ±Г«ГЁ Г­ГҐ Г¬Г®Г¦ГҐГІ ГІГ® ГўГ®Г§ГўГ°Г Г№Г ГҐГІ false
 	virtual bool Move(Side side, olc::Sprite* sprite, float time) {
 		int x = 0;
 		int y = 0;
@@ -235,10 +235,10 @@ protected:
 	float speed_ = 2.0f;
 	const float distance_incr_ = (1.0f / 56.0f);
 
-	//НЕ ОТОБРАЖАЕТ СКОРОСТЬ ПАДЕНИЯ КАК КОНСТАНТУ 
-	//Отображает корость падения на днный момент 
+	//ГЌГ… ГЋГ’ГЋГЃГђГЂГ†ГЂГ…Г’ Г‘ГЉГЋГђГЋГ‘Г’Гњ ГЏГЂГ„Г…ГЌГ€Гџ ГЉГЂГЉ ГЉГЋГЌГ‘Г’ГЂГЌГ’Г“ 
+	//ГЋГІГ®ГЎГ°Г Г¦Г ГҐГІ ГЄГ®Г°Г®Г±ГІГј ГЇГ Г¤ГҐГ­ГЁГї Г­Г  Г¤Г­Г­Г»Г© Г¬Г®Г¬ГҐГ­ГІ 
 	float drop_speed_ = 0.0f;
-	//А вот это как раз отображает то с какой скоростью будет падать персонаж
+	//ГЂ ГўГ®ГІ ГЅГІГ® ГЄГ ГЄ Г°Г Г§ Г®ГІГ®ГЎГ°Г Г¦Г ГҐГІ ГІГ® Г± ГЄГ ГЄГ®Г© Г±ГЄГ®Г°Г®Г±ГІГјГѕ ГЎГіГ¤ГҐГІ ГЇГ Г¤Г ГІГј ГЇГҐГ°Г±Г®Г­Г Г¦
 	float drop_speed_coeficient_ = 0.03f;
 
 	bool is_dead_ = false;
